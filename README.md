@@ -11,5 +11,5 @@
         $venda->buscarVendaItem();
   ----
 - Arquivos JS e CSS removidos por ser de propriedade dividida.
-- Backend completo.
-- Frontend com todo o HTML, sem JS e CSS.
+- Back-end completo.
+- Front-end com todo o HTML, sem JS e CSS.
