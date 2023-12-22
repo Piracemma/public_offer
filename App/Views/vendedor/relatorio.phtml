@@ -1,0 +1,51 @@
+
+<section>
+         <div class="container">
+            <div class="checkout-page">
+               <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                     <div class="checout-form">
+                        <h3>Relatorio <span>Personalizado</span></h3>
+                        <?php if(isset($_GET['act']) && $_GET['act'] == 'nenhuma_venda') {?>
+                           <p class="text-danger">*Nenhuma Venda no periodo.</p>
+                        <?php } else if(isset($_GET['act']) && $_GET['act'] == 'erro') {?>
+                           <p class="text-danger">*Erro, pesquise novamente.</p>
+                        <?php } ?>
+                        <form action="/relatorios-vendedor" method="post" target="_blank">
+                           <div class="row">
+                                                         
+                              <div class="col-lg-6 col-md-6 col-sm-12">
+                                 <div class="form-group">
+                                    <label>De:</label>
+                                    <input type="date" class="form-control" name="de" required>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6 col-md-6 col-sm-12">
+                                 <div class="form-group">
+                                    <label>Até:</label>
+                                    <input type="date" class="form-control" name="ate" required>
+                                 </div>
+                              </div>
+                              <div class="col-lg-6 col-md-6 col-sm-12">
+                                 <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Estado da Venda:</label>
+                                    <select class="form-control" name="estado" required>
+                                       <option value="todas">Todas</option>
+                                       <option value="aprovadas">Aprovadas</option>
+                                       <option value="canceladas">Canceladas</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-12 col-sm-12 text-center">
+                                 <button type="submit" class="btn btn-place-order">Gerar Relatorio</button>
+                              </div>
+                           
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+                 
+               </div>
+            </div>
+         </div>
+      </section>

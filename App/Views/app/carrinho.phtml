@@ -1,0 +1,209 @@
+<?php
+use App\Controllers\CarrinhoController;
+use App\Models\Produto;
+use MF\Model\Container;
+?>
+
+<?php if(isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) { ?>
+   <?php foreach($_SESSION['carrinho'] as $key => $vendedor) { ?>  
+      <section class="cart-sec">
+            <div class="container">
+               <h2><?= $vendedor['informacao']['nome_vendedor'] ?></h2>
+               <div class="cart-page">
+                  <div class="row">
+                     <div class="col-lg-8 col-md-7 col-sm-12">
+                        <div class="cart-table">
+                           <div class="row">
+                              <div class="col-lg-12 col-md-12 col-sm-12">
+                                 <div class="table-responsive">
+                                    <table class="table cart-table-borderless">
+                                       <thead>
+                                          <tr>
+                                             <th>Produto</th>
+                                             <th>Nome</th>
+                                             <th>Preço</th>
+                                             <th>Qtd</th>
+                                             <th>Subtotal</th>
+                                             <th>Remover</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <?php foreach($vendedor['produtos'] as $key2 => $produto) { 
+
+                                             $dados = Container::getModel('Produto');
+
+                                             $dados_produto = $dados->buscarProdutoId($produto['id_produto']);
+
+                                             $explode_produto = explode(' ',$dados_produto['nome']);
+                                             $implode_produto = implode('_',$explode_produto);
+                                             ?>
+
+                                             <tr>
+                                                <td>
+                                                   <div class="cart-table-img">
+                                                      <div class="cart-add-image">
+                                                         <img src="<?= HOST_APLIC ?><?= $dados_produto['imagem1'] ?>">                                          
+                                                      </div>
+                                                   </div>
+                                                </td>
+                                                <td>
+                                                   <div class="cart-table-img">
+                                                      <a href="/produto/<?= $dados_produto['id'] ?>/<?= $implode_produto ?>"><?= $dados_produto['nome'] ?></a>
+                                                   </div>
+                                                </td>
+                                                <td>
+                                                   <p class="mobie-cart-none">R$<?php 
+                     
+                                                   $preco = $dados_produto['preco'];
+                                                   $precoFormatado = number_format($preco, 2, ',', '');
+
+                                                   echo $precoFormatado;
+
+                                                   ?></p>
+                                                </td>
+                                                <td class="mobie-cart-none">
+                                                   <div class="product-quality">
+                                                      <p><?= $_SESSION['carrinho'][$key]['produtos'][$key2]['quantidade'] ?></p>
+                                                   </div>
+                                                </td>
+                                                <td class="mobie-cart-none">
+                                                   <p>R$<?php 
+                                                      $subtotal = $dados_produto['preco'] * $_SESSION['carrinho'][$key]['produtos'][$key2]['quantidade'];
+                                                      $subFormatado = number_format($subtotal, 2, ',', '');
+
+                                                      echo $subFormatado;
+                                                   ?></p>
+                                                </td>
+                                                <td class="mobie-cart-none">
+                                                   <a href="/remover_produto?id_produto=<?= $produto['id_produto'] ?>"><span>
+                                                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                   </span></a>
+                                                </td>
+                                             </tr>
+
+                                          <?php } ?>
+
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-lg-4 col-md-5 col-sm-12">
+                        <div class="checkout-your-order">
+                           <div class="dotted-box-order">
+                              <div class="checkout-payment-title">
+                                 <h3>Resumo da Compra</h3>
+                              </div>
+                              <div class="order-detail">
+                                 <table class="table">
+                                    <tbody>
+                                       <tr>
+                                          <td>Subtotal</td>
+                                          <td class="text-right">R$
+                                             <?php 
+                                                $total_produtos = number_format($vendedor['informacao']['soma_produtos'], 2, ',', '');
+
+                                                echo $total_produtos;
+                                             ?>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td>Frete</td>
+                                          <td class="text-right">R$
+                                             <?php 
+                                                $valor_entrega = number_format($vendedor['informacao']['valor_entrega'], 2, ',', '');
+
+                                                echo $valor_entrega;
+                                             ?>
+                                          </td>
+                                       </tr>                                       
+                                    </tbody>
+                                 </table>
+                                 <div style="border: 1px dotted #fff;" class="mb-2 p-1">
+
+                                    <?php if(isset($vendedor['informacao']['cupom'])) {?>
+
+                                       <p class="mb-2"><b>Cupom: <small><?= strtoupper($vendedor['informacao']['cupom']['cupom']) ?></small></b></p>                                       
+                                       <p class="mb-2"><b>Desconto: R$
+                                       <?php
+                                          $valor_desconto = number_format($vendedor['informacao']['cupom']['valor_desconto'], 2, ',', '');
+
+                                          echo $valor_desconto;
+                                       ?>
+                                       </b></p>
+                                       <a style="color: #4311A4; font-size: 14px;" href="/excluir_cupom?vendedor=<?= $vendedor['informacao']['id_vendedor'] ?>"><span>
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Remover Cupom
+                                       </span></a>
+
+                                    <?php } else {?>
+
+                                       <p class="mb-2"><b>Possui Cupom?</b></p>
+                                       
+                                       <div class="d-flex justify-content-center">
+                                          <div class="form-group mb-0">
+                                             <form action="/cupom?vendedor=<?= $vendedor['informacao']['id_vendedor'] ?>" method="post">
+                                                <input type="text" class="form-control" name="cupom">
+                                                
+                                                <button class="botao-geral btn-light w-100 my-2" style="color: #ff7734;">Aplicar</button>
+                                             </form>
+                                          </div>
+                                       </div>
+                                       <?php 
+
+                                          $tabela_erros = [
+                                             'cupom_ja_aplicado' => '*Cupom já aplicado para outro vendedor',
+                                             'cupom_vencido' => '*Cupom fora do prazo de validade',
+                                             'cupom_utilizado' => '*Cupom já aplicado em outra compra',
+                                             'cupom_nao_encontrado' => '*Cupom não encontrado'
+                                          ];
+
+                                          if(isset($_GET['vendedor']) && !empty($_GET['vendedor']) && isset($_GET['act']) && !empty($_GET['act'])) {
+
+                                             if($vendedor['informacao']['id_vendedor'] == $_GET['vendedor']) {
+
+                                       ?>
+                                          <div class="d-flex justify-content-center">
+                                             <small style="color: #4311A4; font-size: 12px;"><?= isset($tabela_erros[$_GET['act']]) ? $tabela_erros[$_GET['act']] : '' ?></small>
+                                          </div>
+                                       <?php } } ?>
+
+                                    <?php } ?>
+
+                                 </div>
+                              </div>
+                              <div class="order-detail">
+                                 <table class="table">
+                                    <tbody>
+                                       <tr class="table-pt">
+                                          <td>Total</td>
+                                          <td class="text-right">R$
+                                             <?php 
+                                                $valor_entrega = number_format($vendedor['informacao']['total'], 2, ',', '');
+
+                                                echo $valor_entrega;
+                                             ?>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                              <div class="checkout-btn">
+                                 <a class="btn" href="/confirmar_dados?vendedor=<?= $vendedor['informacao']['id_vendedor'] ?>">Finalizar Compra</a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+         <hr>
+
+   <?php } ?>
+<?php } else { ?>
+   <div class="carrinho-vazio d-flex align-items-center justify-content-center">
+      <h3>Seu carrinho está <p class="text-danger d-inline-block">vazio</p> :(</h3>
+   </div>
+<?php } ?>

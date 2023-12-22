@@ -1,0 +1,149 @@
+<section class="product-design">
+         <div class="container">
+            <div class="main-heading">
+               <h2>produtos <span>Destaques</span>
+               </h2>
+            </div>
+         </div>
+</section>
+
+<div class="container mt-4">
+
+    <section class="shop-content sidebar-content pt-1">
+        <div class="container">
+            <?php if(isset($this->view->produtos) && !empty($this->view->produtos)) { ?>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <!-- product sort by -->
+                            <div class="sort-by-section">
+                                <div class="porduct-filter">
+                                    <div class="input-group">
+                                        <a class="sidebar-toggle-icon" id="sidebar-toggle">
+                                        <i class="ti-filter" id="toggleIcon"></i>
+                                        </a>
+                                    </div>
+                                    <div class="collection-view text-right">
+                                        <ul>
+                                        <li class="grid-product active">
+                                            <a class="grid-menu" data-view="grid-view">
+                                            <i class="ti-layout-grid2"></i>
+                                            </a>
+                                        </li>
+                                        <li class="grid-product active">
+                                            <a class="grid-menu" data-view="list-view">
+                                            <i class="ti-view-list"></i>
+                                            </a>
+                                        </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-12">
+                            <!-- product design -->
+                            <div class="product-design shop-product-design">
+                                <div class="row">
+
+                                <?php foreach($this->view->produtos as $produto) { 
+                                    $explode_produto = explode(' ',$produto['nome']);
+                                    $implode_produto = implode('_',$explode_produto);
+                                ?>
+
+                                    <div class="col-lg-3 col-md-4 col-sm-6 my-2 d-flex justify-content-center product-grid-list grid-view">
+                                        
+                                        <div class="main-product-box fadeIn animated">
+                                        <div class="product-img">
+                                            <a href="/produto/<?= $produto['id'] ?>/<?= $implode_produto ?>">
+                                            <img src="<?= HOST_APLIC ?><?= $produto['imagem1'] ?>">
+                                            </a>
+                                        </div>
+                                        <div class="product-right-content">
+                                            
+                                            <div class="product-name">
+                                                <a href="/produto/<?= $produto['id'] ?>/<?= $implode_produto ?>">
+                                                <?= $produto['nome'] ?>
+                                                </a>
+                                            </div>
+                                            <div class="product-price">
+                                                <a href="/produto/<?= $produto['id'] ?>/<?= $implode_produto ?>" class="price-number">
+                                                <span>R$<?php 
+                                        
+                                                $preco = $produto['preco'];
+                                                $precoFormatado = number_format($preco, 2, ',', '');
+
+                                                echo $precoFormatado;
+
+                                                ?>
+                                                </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                                        </div>
+                                    </div>
+
+                                    <?php } ?>
+
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } else { ?>
+                <div class="d-flex align-items-center justify-content-center pt-5">
+                    <h3 style="color: #777;">Nenhum produto dessa <p class="text-danger d-inline-block">Categoria</p> :(</h3>
+                </div>
+            <?php } ?>
+
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <?php if($this->view->total_paginas > 1) {?>
+
+    <ul class="pagination">
+    <?php if(isset($_GET['page']) && $_GET['page'] > 1) {?>
+
+    <li class="pageNumber">
+        <a href="/categorias?categoria=<?= $this->view->categoria ?>" class="prev">
+            <p class="ti-angle-double-left"></p>
+        </a>
+    </li>
+
+    <?php } ?>
+
+    <?php 
+
+        $pagina_atual = $this->view->pagina_atual;
+        $range = $this->view->range_paginas;
+        $inicio = max($pagina_atual - $range, 1);
+        $final = min($pagina_atual + $range, $this->view->total_paginas);
+
+        for($i = $inicio; $i <= $final; $i++) {
+
+    ?>
+
+    <li class="pageNumber <?php if($i == $pagina_atual) {?> active <?php } ?>">
+        <a href="/categorias?categoria=<?= $this->view->categoria ?>&page=<?= $i ?>">
+            <p><?= $i ?></p>
+        </a>
+    </li>
+
+    <?php } ?>
+
+
+    <?php if(!isset($_GET['page']) || $_GET['page'] != $this->view->total_paginas) {?>
+    <li class="pageNumber">
+        <a href="/categorias?categoria=<?= $this->view->categoria ?>&page=<?= $this->view->total_paginas ?>" class="next">
+            <p class="ti-angle-double-right"></p>
+        </a>
+    </li>
+    <?php } ?>
+    </ul>
+
+    <?php } ?>
+
+</div>

@@ -1,0 +1,178 @@
+<!-- Shop content section -->
+<div id="caixa-exclusao"></div>
+<section class="shop-content sidebar-content">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="sort-by-section">
+               <div class="porduct-filter">
+                  <div class="collection-view text-right">
+                     <ul>
+                        <li class="grid-product active">
+                           <a class="grid-menu" data-view="grid-view">
+                           <i class="ti-layout-grid2"></i>
+                           </a>
+                        </li>
+                        <li class="grid-product active">
+                           <a class="grid-menu" data-view="list-view">
+                           <i class="ti-view-list"></i>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-12">
+            <!-- product design -->
+            <div class="product-design shop-product-design">
+               <div class="row">
+
+                  <?php foreach($this->view->produtos as $produto) {?>
+
+                     <div class="col-lg-3 col-md-4 col-sm-6 my-2 product-grid-list list-view">
+                        <div class="main-product-box fadeIn animated">
+                           <div class="product-img">
+                              <a href="/editar_produto?id=<?= $produto['id'] ?>">
+                                 <img src="<?= HOST_APLIC ?><?= $produto['imagem1'] ?>" alt="product">
+                              </a>
+                           </div>
+                           <div class="product-right-content">
+                              <div class="product-name">
+                                 <a href="/editar_produto?id=<?= $produto['id'] ?>"><?= $produto['nome'] ?></a>                                 
+                              </div>
+                              <div class="product-price mt-0">
+                                 <a href="/editar_produto?id=<?= $produto['id'] ?>" class="colors-box">
+                                 <?php if($produto['ativo']) {?>
+                                    <span class="color green"></span><span style="color: #65aa54 !important;" class="pl-1">Ativo</span>
+                                 <?php } else {?>
+                                    <span class="color red"></span><span style="color: #ff4141 !important;" class="pl-1">Inativo</span>
+                                 <?php } ?>
+                                 </a>
+                              </div>
+                              <div class="product-description-text">
+                                 <p><b>Descrição: </b><?= $produto['descricao'] ?></p>
+                                 <?php if(!empty($produto['variacao'])) {?>
+                                    <p><b>Variação: </b><?= $produto['variacao'] ?></p>
+                                 <?php } ?>
+                                 <p <?php if($produto['estoque'] == 0) {?> style="color: #ff4141 !important;"<?php } ?>><b>Estoque: </b> <?= $produto['estoque'] ?></p>
+                              </div>
+                              <div class="product-price">
+                                 <a href="/editar_produto?id=<?= $produto['id'] ?>" class="price-number">
+                                 <span>R$<?php 
+                  
+                                    $preco = $produto['preco'];
+                                    $precoFormatado = number_format($preco, 2, ',', '');
+
+                                    echo $precoFormatado;
+
+                                    ?>
+                                 </span>
+                                 </a>                                 
+                              </div>
+                              <div class="product-name">
+                              <p class="my-2 d-inline-block"><a class="text-info" href="/editar_produto?id=<?= $produto['id'] ?>">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                 <b>Editar</b></a>
+                              </p>
+                              <p class="my-2 ml-3 d-inline-block"><a class="text-danger" onclick="excluirProduto(<?= $produto['id'] ?>)">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                 <b>Excluir</b></a>
+                              </p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                  <?php } ?>
+
+               </div>
+               <!-- Pagination -->
+               <?php if($this->view->total_paginas > 1) {?>
+
+                  <ul class="pagination">
+                     <?php if(isset($_GET['page']) && $_GET['page'] > 1) {?>
+
+                     <li class="pageNumber">
+                        <a href="/meus_produtos" class="prev">
+                           <p
+                              class="ti-angle-double-left"></p>
+                        </a>
+                     </li>
+
+                     <?php } ?>
+
+                     <?php 
+
+                        $pagina_atual = $this->view->pagina_atual;
+                        $range = $this->view->range_paginas;
+                        $inicio = max($pagina_atual - $range, 1);
+                        $final = min($pagina_atual + $range, $this->view->total_paginas);
+
+                        for($i = $inicio; $i <= $final; $i++) {
+
+                     ?>
+
+                     <li class="pageNumber <?php if($i == $pagina_atual) {?> active <?php } ?>">
+                        <a href="/meus_produtos?page=<?= $i ?>">
+                           <p><?= $i ?></p>
+                        </a>
+                     </li>
+
+                     <?php } ?>
+                     
+
+                     <?php if(!isset($_GET['page']) || $_GET['page'] != $this->view->total_paginas) {?>
+                     <li class="pageNumber">
+                        <a href="/meus_produtos?page=<?= $this->view->total_paginas ?>" class="next">
+                           <p
+                              class="ti-angle-double-right"></p>
+                        </a>
+                     </li>
+                     <?php } ?>
+                  </ul>
+
+               <?php } ?>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<script>
+
+      function excluirProduto(id) {
+
+         var excluir = document.createElement('div');
+         var body = document.getElementById('caixa-exclusao');
+
+         excluir.innerHTML = `<div style="position: fixed; width: 100%; height: 100%; background: rgba(169,169,169, 0.7); top:0; left: 0; z-index: 1000; display: flex;" id="exclusao">
+            <div style="margin: auto; background: #FFF; padding: 10px; width: 250px; height: 110px; border-radius: 15px; text-align:center;">
+               <h5 style="color: #ff7734; font-weight: bold;">Confirmar Exclusão?</h5>
+               <div style="margin-top: 20px;">
+                  <div style="display: inline-block;">
+                     <a class="btn-cancel" href="/excluir_produto?produto=`+id+`" style="margin-right: 10px;">Confirmar</a>
+                  </div>
+                  <div style="display: inline-block;">
+                     <a style="border-radius: 30px; background: rgba(169,169,169, 1) !important; color: #FFFFFF !important; padding: 8px 15px; font-size: 14px; font-weight: 600; border: 1px solid transparent; display: inline-block;" onclick="cancelarExclusão()">Cancelar</a>
+                  </div>
+               </div>
+            </div>
+         </div>`;
+
+         body.appendChild(excluir);
+
+      }
+
+      function cancelarExclusão() {
+
+         var exclusao = document.getElementById('exclusao');
+
+         if (exclusao.parentNode) {
+            exclusao.parentNode.removeChild(exclusao);
+         }
+
+      }
+
+</script>

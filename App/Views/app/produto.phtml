@@ -1,0 +1,152 @@
+<section class="product-content sidebar-content">
+         <div class="container"> 
+                     
+            <div class="row">                     
+               <div class="col-lg-4 col-md-6">
+                  <div id='image-thumbnail' class="image-viewer"></div>
+               </div>
+               <div class="col-lg-8 col-md-6">
+                  <div class="product-describe">
+                     <h2 class="product-title-main-name">
+                        <?= $this->view->produto['nome'] ?>
+                     </h2>
+                     <div class="product-main-price">
+                        <div class="price-number" style="color: #ff7734; font-size: 18px;">
+                        <span>R$<?php
+
+                           $preco = $this->view->produto['preco'];
+                           $precoFormatado = number_format($preco, 2, ',','');
+                           
+                           echo $precoFormatado;
+                        ?>
+                        </span>
+                        </div>
+                     </div>                     
+                     <div class="product-main-detail">
+                        <h3>Descrição</h3>
+                        <p><?= $this->view->produto['descricao'] ?></p>
+
+                        <?php if(!empty($this->view->produto['variacao'])) { ?>
+                           <h3>Tamanhos:</h3>
+                           <p><?= $this->view->produto['variacao'] ?></p>
+                        <?php } ?>
+
+                        <h3 class="d-inline-block">Estoque:&nbsp;<?= $this->view->produto['estoque'] ?></h3>
+                        
+                     </div>
+                     <div class="my-2">
+
+                        <?php if(isset($this->view->horario_funcionamento)) {?>
+
+                           <?php if(!$this->view->horario_funcionamento) {?>
+                              <p class="text-danger m-0 estabelecimento-fechado">Fechado, entregas no proximo dia de funcionamento.</p>
+                           <?php } else if(isset($this->view->horario_funcionamento['aberto']) && $this->view->horario_funcionamento['aberto'] && $this->view->horario_funcionamento['proximo_fim']) {?>
+                              <p class="text-warning m-0 estabelecimento-fechando">Fechando, entregas no proximo dia de funcionamento.</p>
+                           <?php } else if(isset($this->view->horario_funcionamento['aberto']) && $this->view->horario_funcionamento['aberto'] && !$this->view->horario_funcionamento['proximo_fim']) {?>
+                              <p class="text-success m-0 estabelecimento-aberto">Entrega hoje!</p>
+                           <?php } ?>
+                        <?php } ?>
+
+                     </div>  
+                     <div class="product-quality">
+                        <form action="">
+                           <span class="size-block">
+                              <label style="color: #ff7734; font-size: 18px; margin-right:30px;">Observação</label>
+                              <p class="p-box" style="width: 180px;">
+                              <input type="text" class="qty" style="width: 100%;" placeholder="ex: tamanho M" name="observacao" id="observacao">
+                              </p>
+                           </span>
+                           <div class="product-cart-btn">
+                              <a href="" class="btn" id="adicionarCarrinho">+ Carrinho</a>
+                              <a href="" class="btn" id="finalizarCompra">Comprar</a>
+                           </div>
+                        </form>
+                     </div>
+                     
+                  </div>
+               </div>
+            </div>
+         </div>
+</section>
+      
+      <?php if(isset($this->view->vendedor_produtos) && !empty($this->view->vendedor_produtos)) {?>
+      <!-- Related products section -->
+      <section class="product-area product-design">
+         <div class="container">
+            <div class="main-heading">
+               <h2>do mesmo <span>Vendedor </span><small><a href="/produtos_vendedor?vendedor=<?= $this->view->id_vendedor ?>"> Ver todos</a></small></h2>
+            </div>
+            <div class="row new-slider">
+
+               <?php foreach($this->view->vendedor_produtos as $produto) { 
+                    $explode_produto = explode(' ',$produto['nome']);
+                    $implode_produto = implode('_',$explode_produto);
+               ?>
+
+               <div class="col-lg-4">
+                  <a href="/produto/<?= $produto['id'] ?>/<?= $implode_produto ?>">
+                  <div class="main-product-box">
+                     <div class="product-img">
+                        <img src="<?= HOST_APLIC ?><?= $produto['imagem1'] ?>" alt="product">
+                     </div>
+                     <div class="product-name">
+                        <a href="/produto/<?= $produto['id'] ?>/<?= $implode_produto ?>">
+                        <?= $produto['nome'] ?>
+                        </a>
+                     </div>
+                     <div class="product-price">
+                        <a href="/produto/<?= $produto['id'] ?>/<?= $implode_produto ?>" class="price-number">
+                        <span>R$<?php 
+                  
+                        $preco = $produto['preco'];
+                        $precoFormatado = number_format($preco, 2, ',', '');
+
+                        echo $precoFormatado;
+
+                        ?>
+                        </span>
+                        </a>                        
+                     </div>
+                  </div>
+                  </a>
+               </div>
+
+               <?php } ?>
+
+            </div>
+         </div>
+      </section>
+
+      <?php } ?>
+
+      <?php if (isset($this->view->produto['id'])) { ?>
+         <script>
+            var viewId = '<?php echo $this->view->produto['id']; ?>';
+         </script>
+      <?php } ?>
+
+      <script>
+         //Para enviar as informacoes
+        const observacaoInput = document.getElementById("observacao");
+        const adicionarCarrinhoLink = document.getElementById("adicionarCarrinho");
+        const finalizarCompraLink = document.getElementById("finalizarCompra");
+
+        adicionarCarrinhoLink.addEventListener("click", function(event) {
+            event.preventDefault();
+            const produtoId = <?= $this->view->produto['id'] ?>;
+            const produtoNome = '<?= $this->view->produto_link ?>';
+            const observacao = observacaoInput.value;
+            const idVendedor = <?= $this->view->id_vendedor ?>;
+            const url = `/adicionar_carrinho?produto=${produtoId}&nome=${produtoNome}&observacao=${observacao}&id_vendedor=${idVendedor}`;
+            window.location.href = url;
+        });
+
+        finalizarCompraLink.addEventListener("click", function(event) {
+            event.preventDefault();
+            const produtoId = <?= $this->view->produto['id'] ?>;
+            const produtoNome = '<?= $this->view->produto_link ?>';
+            const observacao = observacaoInput.value;
+            const url = `/finalizar_compra?produto=${produtoId}&nome=${produtoNome}&observacao=${observacao}`;
+            window.location.href = url;
+        });
+    </script>

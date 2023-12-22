@@ -1,0 +1,160 @@
+
+		<!-- Sign up section -->
+        <style>
+            body {
+                background: #ececec;
+            }        
+        </style>	
+<div class="signup-page mt-sm-5 mt-0">
+    <div class="signup-form">
+        <div class="form-title">
+            <h2 class="titulo-form">Editar Produto:</h2>
+        </div>
+        <div class="row">
+            <form action="/atualizar_produto" class="row" method="post">
+                <input type="hidden" name="id" value="<?= $this->view->produto[0]['id'] ?>">
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label class="label-input" for="nome_produto">Nome do Produto</label>
+                <input class="input-tag" type="text" id="nome_produto" value="<?= $this->view->produto[0]['nome'] ?>" disabled>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label class="label-input" for="descricao">Descrição do produto</label>
+                <textarea class="textarea-form" name="descricao" id="descricao" required cols="30" rows="4"><?= $this->view->produto[0]['descricao'] ?></textarea>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label class="label-input" for="variacao">Variações<span> *opcional</span></label>
+                <textarea class="textarea-form" name="variacao" id="variacao" cols="30" rows="2"><?= $this->view->produto[0]['variacao'] ?></textarea>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-4 form-group select-form">
+                <label id="categoria" class="label-input  text-number" for="categoria">Categoria</label>
+                <select class="form-control" id="categoria" disabled>
+                    <option value="moda" <?php if($this->view->produto[0]['categoria'] == 'moda') {?> selected <?php } ?>>Moda</option>
+                    <option value="eletronicos" <?php if($this->view->produto[0]['categoria'] == 'eletronicos') {?> selected <?php } ?>>Eletronicos</option>
+                    <option value="presentes/papelaria" <?php if($this->view->produto[0]['categoria'] == 'presentes/papelaria') {?> selected <?php } ?>>Presentes e Papelaria</option>
+                    <option value="cama/mesa/banho" <?php if($this->view->produto[0]['categoria'] == 'cama/mesa/banho') {?> selected <?php } ?>>Cama/Mesa/Banho</option>
+                </select>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-4 form-group select-form">
+                <label id="publico" class="label-input  text-number" for="publico">Publico Principal</label>
+                <select class="form-control" id="publico" disabled>
+                    <option value="todos" <?php if($this->view->produto[0]['categoria'] == 'todos') {?> selected <?php } ?>>Todos</option>
+                    <option value="f" <?php if($this->view->produto[0]['categoria'] == 'f') {?> selected <?php } ?>>Feminino</option>
+                    <option value="m" <?php if($this->view->produto[0]['categoria'] == 'm') {?> selected <?php } ?>>Masculino</option>
+                </select>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label id="preco" class="label-input  text-number" for="preco">Preço<span> *acima de R$10,00</span></label>
+                <input class="input-tag" type="number" step="0.01" name="preco" id="preco" min="10" value="<?= $this->view->produto[0]['preco'] ?>" required>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-4">
+                <label id="estoque" class="label-input text-number" for="estoque">Estoque</label>
+                <input class="input-tag" type="number" step="1" name="estoque" id="estoque" min="1" value="<?= $this->view->produto[0]['estoque'] ?>" required>
+            </div>
+
+            <div class="col-md-12 col-sm-12 mb-3">
+                    <label class="label-input" for="imagem1">Imagem 1</label>
+                    <input type="file" class="input-img d-none" id="imagem1" onchange="displayImageInfo(1)" accept="image/*" disabled>
+                    <label id="image-container1" class="image-container d-flex m-auto justify-content-center" for="imagem1">
+                        <img src="<?= HOST_APLIC ?><?= $this->view->produto[0]['imagem1'] ?>" alt="">
+                    </label>
+            </div>
+
+            <?php if(!empty($this->view->produto[0]['imagem2'])) {?>
+            <div class="col-md-12 col-sm-12 mb-3">
+                <label class="label-input" for="imagem2">Imagem 2</label>
+                    <input type="file" class="input-img d-none" id="imagem2" onchange="displayImageInfo(2)" accept="image/*" disabled>
+                    <label id="image-container2" class="image-container d-flex m-auto justify-content-center" for="imagem2">
+                        <img src="<?= HOST_APLIC ?><?= $this->view->produto[0]['imagem2'] ?>" alt="">
+                    </label>      
+            </div>
+            <?php } ?>
+
+            <?php if(!empty($this->view->produto[0]['imagem3'])) {?>
+            <div class="col-md-12 col-sm-12 mb-3">
+                <label class="label-input" for="imagem3">Imagem 3</label>
+                <input type="file" class="input-img d-none" id="imagem3" onchange="displayImageInfo(3)" accept="image/*" disabled>
+                <label id="image-container3" class="image-container d-flex m-auto justify-content-center" for="imagem3">
+                    <img src="<?= HOST_APLIC ?><?= $this->view->produto[0]['imagem3'] ?>" alt="">
+                </label> 
+            </div>
+            <?php } ?>
+
+            <div class="col-12">
+                <button type="submit" class="botao-form">Atualizar Produto</button>
+            </div>
+            
+            </form>            
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function validaQuantidade() {
+
+        var inputNome = document.getElementById('nome_produto');
+        var quantidadeCarac = document.getElementById('quantidade-caracter');
+        var valorNome = inputNome.value;
+
+        if(valorNome.length > 50) {
+
+            quantidadeCarac.innerHTML = '';
+            quantidadeCarac.innerHTML = 'Excedeu a quantidade!';
+            quantidadeCarac.style.color = 'red';
+
+        } else {
+
+            quantidadeCarac.innerHTML = '';
+            quantidadeCarac.innerHTML = 'Caracteres restantes: '+(50-valorNome.length);
+            quantidadeCarac.style.color = '#444444';
+
+        }
+    }
+   
+    function displayImageInfo(numImg) {
+        const fileInput = document.getElementById('imagem' + numImg);
+        const imageContainer = document.getElementById('image-container' + numImg);
+        const imageSelectedMessage = document.getElementById('image-selected-message' + numImg);
+        const imageLabel = document.getElementById('label-image' + numImg);
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.id = 'img' + numImg;
+
+                img.onload = function () {
+                    const width = img.width;
+                    const height = img.height;
+
+                    if (width / height < 0.97 || width / height > 1.03) {
+                        imageContainer.innerHTML = ''; // Limpa a imagem
+                        imageLabel.innerHTML = 'Formato inválido! Clique aqui e selecione outra.'; // Exibe mensagem de formato inválido
+                        imageContainer.style.display = 'none';
+                        imageLabel.style.display = 'block';
+                        imageLabel.style.color = '#f34d4d';
+                    } else {
+                        imageContainer.innerHTML = ''; // Limpa a imagem
+                        imageLabel.textContent = '';
+                        imageContainer.appendChild(img);
+                        imageSelectedMessage.textContent = ''; // Limpa a mensagem de formato inválido
+                        imageContainer.style.display = 'block';
+                        imageLabel.style.display = 'none';
+                    }
+                };
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            imageContainer.style.display = 'none';
+            imageLabel.style.display = 'block';
+            const remover = document.getElementById('img' + numImg);
+            remover.style.display = 'none';
+        }
+    }
+
+</script>
+		

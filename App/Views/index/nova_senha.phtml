@@ -1,0 +1,158 @@
+<div class="form-bg-color">
+    <div class="login-page">
+
+        <form class="login-form" id="form" action="/nova_senha" method="POST">
+
+            <div class="form-title">
+                <h2>Nova senha:</h2>
+            </div>
+            <div style="position: relative;">
+                <label class="label-input" for="senha">Senha</label>
+                <input onkeyup="verificaU(),validaSenhaRegexU()" onblur="limpaSmalU()" class="input-tag" type="password" name="senha" id="senhau" required>
+                <svg id="senha1u" onclick="alternarTipoSenhaU()" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye senha"  style="right: 5px !important;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg id="senha2u" onclick="alternarTipoSenhaU()" style="display: none; right: 5px !important;" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off senha"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                <small class="text-danger" id="conferesenharegexu">*A senha deve conter de 8 a 20 caracteres com: 1 maiuscula, 1 minuscula, 1 numero e 1 caractere especial (@$!%*?&#/).</small>
+            </div>
+
+            <div style="position: relative;">
+                <label class="label-input" for="validasenha">Confirmar Senha</label>
+                <input onkeyup="validaSenhaU()" class="input-tag" type="password" name="valida_senha" id="validasenhau" required>
+                <svg id="senha3u" onclick="alternarTipoSenha2U()" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye senha" style="right: 5px !important;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg id="senha4u" onclick="alternarTipoSenha2U()" style="display: none; right: 5px !important;" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off senha"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                <small class="text-danger" id="conferesenhau">*As senhas não conferem</small>
+            </div>
+
+            <button type="submit" class="botao-form">Alterar</button>
+
+        </form>
+    
+    </div>
+
+</div>
+
+<script>
+    function alternarTipoSenhaU() {
+    var senhau = document.getElementById("senhau");
+    var senha1u = document.getElementById("senha1u");
+    var senha2u = document.getElementById("senha2u");
+    var tipoAtualu = senhau.type;
+
+    // Alterna para o tipo de entrada oposto
+    if (tipoAtualu === "password") {
+      senhau.type = "text";
+      senha1u.style.display = 'none';
+      senha2u.style.display = 'block';
+    } else {
+      senhau.type = "password";
+      senha1u.style.display = 'block';
+      senha2u.style.display = 'none';
+    }
+}
+  function alternarTipoSenha2U() {
+    var senhau = document.getElementById("validasenhau");
+    var senha3u = document.getElementById("senha3u");
+    var senha4u = document.getElementById("senha4u");
+    var tipoAtualu = senhau.type;
+
+    // Alterna para o tipo de entrada oposto
+    if (tipoAtualu === "password") {
+      senhau.type = "text";
+      senha3u.style.display = 'none';
+      senha4u.style.display = 'block';
+    } else {
+      senhau.type = "password";
+      senha3u.style.display = 'block';
+      senha4u.style.display = 'none';
+    }
+  }
+
+  //Validar senha
+
+  var senhau = document.getElementById('senhau');
+  var confsenhau = senhau.value;
+  if(confsenhau == '') {
+    var validasenhau = document.getElementById("validasenhau");
+    var confvalidasenhau = validasenhau.value;
+    var smallsenhau = document.getElementById("conferesenhau");
+    var textRegexu = document.getElementById('conferesenharegexu');
+
+    textRegexu.style.display = "none";
+    smallsenhau.style.display = "none";
+    validasenhau.style.borderColor = " #e0e0e0";
+  }
+
+  function validaSenhaRegexU() {
+
+    var validaRegexu;
+
+    var padraou = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#/])[A-Za-z\d@$!%*?&#/]{8,20}$/;
+
+    var senhau = document.getElementById('senhau');
+    var confsenhau = senhau.value;
+  
+    if (padraou.test(confsenhau)) {
+
+      validaRegexu = true; // A senha é válida
+
+    } else {
+
+      validaRegexu = false; // A senha é inválida
+
+    }
+
+    var textRegexu = document.getElementById('conferesenharegexu');
+
+    if (validaRegexu) {
+
+      textRegexu.style.display = "none";
+      senhau.style.borderColor = " #e0e0e0";
+
+    } else {
+
+      textRegexu.style.display = "block";
+      senhau.style.borderColor = " #dc3545";
+
+    }
+
+  }
+
+  function limpaSmalU() {
+
+    var senhau = document.getElementById('senhau');
+    var confsenhau = senhau.value;
+
+    if(confsenhau == '') {
+
+      var textRegexu = document.getElementById('conferesenharegexu');
+
+      textRegexu.style.display = "none";
+      senhau.style.borderColor = " #e0e0e0";
+
+    }
+
+  }
+
+  function verificaU() {
+
+    validaSenhaU();
+
+  }
+  function validaSenhaU() {//verifica se são igauis
+    var senhau = document.getElementById('senhau');
+    var confsenhau = senhau.value;
+    var validasenhau = document.getElementById("validasenhau");
+    var confvalidasenhau = validasenhau.value;
+    
+
+    var smallsenhau = document.getElementById("conferesenhau");
+
+    if(confsenhau == confvalidasenhau) {
+        smallsenhau.style.display = "none";
+        validasenhau.style.borderColor = " #e0e0e0";
+    } else {
+        smallsenhau.style.display = "block";
+        validasenhau.style.borderColor = "#dc3545";
+    }
+
+  }
+</script>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+   <head>
+      <title>Offer <?= isset($this->view->pagina) ? ' - '.ucfirst($this->view->pagina) : '' ?></title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Descubra a conveniência da compra local online! Nosso marketplace une comerciantes locais e compradores, oferecendo um jeito mais fácil e rápido de encontrar os produtos que você adora. Explore uma variedade de lojas locais, apoie os negócios de sua comunidade e diversão da simplicidade das compras online. Junte-se a Offer agora!">
+      <meta name="keywords" content="compras locais, mercado local, comercio local online, comprando de comerciantes locais, vendas de produtos locais, lojas locais online, compras de bairro, apoio a comunidade, produtos locais, comprar do comercio local, cassia, minas gerais">
+      <meta name="author" content="Matheus Rodrigues">
+      <meta name="theme-color" content="#FF4E16">
+      <link rel="shortcut icon" type="image/x-icon" href="<?= HOST_APLIC ?>assets/img/icons/favicon.png">
+      <!-- google fonts -->
+      <!--Font-Family-->
+      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+      <link
+         href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+         rel="stylesheet">
+      <!-- jquery ui -->
+      <link rel='stylesheet' href='<?= HOST_APLIC ?>assets/css/vendor/jquery-ui.min.css'>
+      <!-- Animated ui -->
+      <link rel='stylesheet' href='<?= HOST_APLIC ?>assets/css/vendor/animate.min.css'>
+      <!-- owl & themify icons -->
+      <link rel='stylesheet' href='<?= HOST_APLIC ?>assets/css/vendor/owl-carousel.css'>
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/vendor/themify-icons.css">
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/vendor/magnific-popup.css">
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/vendor/zoomy.css">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/vendor/bootstrap.css">
+      <!-- Main styleshit & responsive css -->
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/style.css">
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/responsive.css">
+      <!-- Color css -->
+      <link rel="stylesheet" id="skin-switcher-css" href="<?= HOST_APLIC ?>assets/css/colors/skin-4.css">
+      <!-- Background css -->
+      <link rel="stylesheet" id="bg-switcher-css" href="<?= HOST_APLIC ?>assets/css/backgrounds/bg-4.css">
+
+      <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/demo-2.css">
+   </head>
+   <body>
+      <!-- Preloader -->
+      <div class="site-loader">
+         <div class="ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+         </div>
+      </div>
+      <!-- Scroll top / Back to top -->
+      <div class='top'></div>
+
+        <?php require_once NAVBAR; ?>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+        <?= $this->content() ?>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <footer class="footer fadeIn animated">
+         <div class="footer-bg">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-2 col-md-6 col-sm-12 space-4">
+                     <div class="footer-heading">
+                        <h3>Outros Links</h3>
+                     </div>
+                     <div class="other-link">
+                        <ul>
+                           <li>
+                              <a href="/politica_de_privacidade">Política de Privacidade</a>
+                           </li>
+                           <li>
+                              <a href="/termos_e_condicoes">Termos e Condições</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-sm-12 space-4">
+                     <div class="footer-heading">
+                        <h3>Fale Conosco</h3>
+                     </div>
+                     <div class="add-section">
+                        <ul>
+                           <li>
+                              <a href="https://wa.me/number" target="_blank">
+                              <i class="ti-mobile"></i>
+                              <span>number</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="mailto:teste@test.com" target="_blank" class="mail-box">
+                              <i class="ti-email"></i>
+                              <span>teste@test.com</span>
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>                  
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!-- Back to tpo button -->
+      <div class="up-scroll">
+         <div class="scroll" id="scroll-top-btn">
+            <i class="ti-angle-up"></i>
+         </div>
+      </div>
+
+
+      <!-- Popup de novidade  -->
+      <?php if(isset($this->view->notificacao)) {
+         $status = $this->view->notificacao;
+         $notificacao = array(
+            'pendente' => array(
+               0 => 'Pedido Enviado!',
+               1 => 'Aguarde a confirmação pelo vendedor.',
+               'img' => 'pendente'
+            ),
+            'aprovado' => array(
+               0 => 'Pedido Aceito!',
+               1 => 'O vendedor aceitou e está preparando seu pedido.',
+               'img' => 'aprovado'
+            ),
+            'recusado' => array(
+               0 => 'Pedido Recusado :(',
+               1 => 'O vendedor recusou seu pedido, logo chegará uma mensagem com a explicação.',
+               'img' => 'recusado'
+            ),
+            'nova_venda' => array(
+               0 => 'Uhuuul Nova Venda!!!',
+               1 => 'Novo pedido pronto para ser aceito! <form action="/vendedor" method="post"><button type="submit" class="botao-geral btn-sm btn-success mt-1">Ir para o pedido</button></form>.',
+               'img' => 'aprovado'
+            ),
+         );
+      ?>
+         <div class="recent-purchase popupa">
+
+            <img src="assets/img/status/<?= $notificacao[$status]['img'] ?>.png" alt="payment image">
+            
+            <div class="detail">
+               
+               <h6><?= $notificacao[$status][0] ?></h6>
+               <h6><?= $notificacao[$status][1] ?></h6>
+               
+            </div>           
+
+            <a href="javascript:void(0)" class="icon-btn recent-close"><i class="ti-close"></i></a>
+
+         </div>
+      <?php } ?>
+      
+      
+      <!-- Footer navigation panel for responsive display end -->
+      
+      <!-- Jquery JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/jquery.js"></script>
+      <script src="<?= HOST_APLIC ?>assets/js/jquery-ui.min.js"></script>
+      <!-- popper JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/popper.js"></script>
+      <!-- bootstrap JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/bootstrap.js"></script>
+      <!-- bootstrap notify JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/bootstrap-notify.js"></script>
+      <!-- owl-carousel JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/owl-carousel.js"></script>
+      <!-- slick JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/slick.js"></script>
+      <!-- Zoom image JS -->
+      <script src="<?= HOST_APLIC ?>assets/js/zoomy.js"></script>
+      <script src="<?= HOST_APLIC ?>assets/js/jquery.magnific-popup.min.js"></script>
+      <script src="<?= HOST_APLIC ?>assets/js/script.js"></script>
+   </body>
+</html>

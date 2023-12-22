@@ -1,0 +1,164 @@
+<div class="container mt-3">
+
+    <div class="row">
+
+        <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+
+            <div class="main-sidebar">
+                <h2 style="color: #868686;">Vendedores</h2>
+                <div class="categories">
+                
+                    <ul>
+
+                        <li>
+                            <a href="/vendedores" <?php if(!isset($_GET['pagina'])) { ?> style="color: #4311A4;"<?php } ?>>de A à Z</a>
+                        </li>
+                        <li>
+                            <a href="/vendedores?pagina=mais_vendas" <?php if(isset($_GET['pagina']) && $_GET['pagina'] == 'mais_vendas') { ?> style="color: #4311A4;"<?php } ?>>mais Vendas</a>
+                        </li>
+                                                                            
+                    </ul>
+
+                </div>
+
+            </div>            
+
+        </div>
+
+        <div class="col-lg-9 col-md-12 col-sm-12 col-12">
+
+        <section class="shop-content sidebar-content py-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- product design -->
+                                <div class="product-design shop-product-design">
+                                <div class="row">
+
+                                    <?php foreach($this->view->vendedores as $vendedor) {?>
+
+
+                                    <div class="col-lg-4 col-md-4 col-sm-6 product-grid-list grid-view my-3">
+                                        <div class="main-product-box fadeIn animated">
+                                            <div class="product-img">
+                                            <a href="/produtos_vendedor?vendedor=<?= $vendedor['id'] ?>"><img src="<?= $vendedor['foto_caminho'].$vendedor['foto_perfil'] ?>" class="img-vendedor-vendedores" alt="product"></a>
+                                            </div>
+                                            <div class="product-right-content">
+                                                <div class="product-name">
+                                                    <a href="/produtos_vendedor?vendedor=<?= $vendedor['id'] ?>"><?= $vendedor['nome'] ?></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <?php } ?>
+                                    
+
+                                </div>
+                                <!-- Pagination -->
+                                <?php if($this->view->total_paginas > 1) {?>
+
+                                    <?php if(!isset($_GET['pagina'])) {?>
+
+                                        <ul class="pagination">
+                                            <?php if(isset($_GET['page']) && $_GET['page'] > 1) {?>
+
+                                            <li class="pageNumber">
+                                                <a href="/vendedores" class="prev">
+                                                    <p class="ti-angle-double-left"></p>
+                                                </a>
+                                            </li>
+
+                                            <?php } ?>
+
+                                            <?php 
+
+                                                $pagina_atual = $this->view->pagina_atual;
+                                                $range = $this->view->range_paginas;
+                                                $inicio = max($pagina_atual - $range, 1);
+                                                $final = min($pagina_atual + $range, $this->view->total_paginas);
+
+                                                for($i = $inicio; $i <= $final; $i++) {
+
+                                            ?>
+
+                                            <li class="pageNumber <?php if($i == $pagina_atual) {?> active <?php } ?>">
+                                                <a href="/vendedores?page=<?= $i ?>">
+                                                    <p><?= $i ?></p>
+                                                </a>
+                                            </li>
+
+                                            <?php } ?>
+
+
+                                            <?php if(!isset($_GET['page']) || $_GET['page'] != $this->view->total_paginas) {?>
+                                            <li class="pageNumber">
+                                                <a href="/vendedores?page=<?= $this->view->total_paginas ?>" class="next">
+                                                    <p class="ti-angle-double-right"></p>
+                                                </a>
+                                            </li>
+                                            <?php } ?>  
+                                        </ul>
+
+                                    <?php } ?>
+
+                                    <?php if(isset($_GET['pagina']) && $_GET['pagina'] == 'mais_vendas') {?>
+
+                                        <ul class="pagination">
+                                            <?php if(isset($_GET['page']) && $_GET['page'] > 1) {?>
+
+                                            <li class="pageNumber">
+                                                <a href="/vendedores?pagina=mais_vendas" class="prev">
+                                                    <p class="ti-angle-double-left"></p>
+                                                </a>
+                                            </li>
+
+                                            <?php } ?>
+
+                                            <?php 
+
+                                                $pagina_atual = $this->view->pagina_atual;
+                                                $range = $this->view->range_paginas;
+                                                $inicio = max($pagina_atual - $range, 1);
+                                                $final = min($pagina_atual + $range, $this->view->total_paginas);
+
+                                                for($i = $inicio; $i <= $final; $i++) {
+
+                                            ?>
+
+                                            <li class="pageNumber <?php if($i == $pagina_atual) {?> active <?php } ?>">
+                                                <a href="/vendedores?pagina=mais_vendas&page=<?= $i ?>">
+                                                    <p><?= $i ?></p>
+                                                </a>
+                                            </li>
+
+                                            <?php } ?>
+
+
+                                            <?php if(!isset($_GET['page']) || $_GET['page'] != $this->view->total_paginas) {?>
+                                            <li class="pageNumber">
+                                                <a href="/vendedores?pagina=mais_vendas&page=<?= $this->view->total_paginas ?>" class="next">
+                                                    <p class="ti-angle-double-right"></p>
+                                                </a>
+                                            </li>
+                                            <?php } ?>  
+                                        </ul>
+                                    
+                                    <?php } ?>
+
+                                <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        </div>
+
+    </div>
+
+</div>

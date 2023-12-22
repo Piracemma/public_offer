@@ -1,0 +1,65 @@
+<div style="height: 100vh;">
+    <div class="login-page">
+        <form class="login-form" id="form" action="/codigo_verificador" method="post">
+            <div class="form-title">
+                <h2 class="mb-1">Código:</h2>
+                <?php if(isset($this->view->erro) && $this->view->erro == 'codigo_invalido') { ?>
+                <small class="text-danger">*Código invalido!</small><br>
+                <?php } ?>
+                <?php if(!isset($this->view->erro)) { ?>
+                <small class="text-success">*Codigo enviado, verifique a caixa de spam!</small><br>
+                <?php } ?>
+                <small class="text-secondary" id="div-contador" style="line-height: 40px;">
+                Caso necessario reenvie o e-mail em: 
+                <div class="d-inline-block" id="contador">
+                    <span id="minutos">01</span>:<span id="segundos">00</span>
+                </div>
+                </small>
+                <small style="display: none; line-height: 40px;" id="enviarNovamente"><a class="text-info" href="/reenviar_email">Enviar novamente</a></small>
+            </div>
+            <input class="input-tag" type="text" name="codigo_verificador" id="codigo_verificador" placeholder="Código recebido no e-mail" required>
+
+            <button id="botao" class="botao-form">Validar</button>
+
+            
+        </form>
+    </div>
+</div>
+
+    <script>
+        // Função para formatar o tempo em MM:SS
+        function formatTime(minutos, segundos) {
+            return (minutos < 10 ? '0' : '') + minutos + ':' + (segundos < 10 ? '0' : '') + segundos;
+        }
+
+        // Função que inicia a contagem regressiva
+        function iniciarContagemRegressiva() {
+            var minutos = 1;
+            var segundos = 0;
+
+            var contador = document.getElementById("contador");
+            var enviarNovamente = document.getElementById("enviarNovamente");
+            var divcontador = document.getElementById('div-contador');
+
+            var interval = setInterval(function () {
+                segundos--;
+
+                if (segundos < 0) {
+                    minutos--;
+                    segundos = 59;
+                }
+
+                contador.innerHTML = formatTime(minutos, segundos);
+
+                if (minutos === 0 && segundos === 0) {
+                    clearInterval(interval);
+                    contador.style.display = "none";
+                    divcontador.style.display = "none";
+                    enviarNovamente.style.display = "block";
+                }
+            }, 1000);
+        }
+
+        // Iniciar a contagem regressiva quando a página carregar
+        window.onload = iniciarContagemRegressiva;
+    </script>

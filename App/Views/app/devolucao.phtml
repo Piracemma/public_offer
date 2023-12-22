@@ -1,0 +1,137 @@
+<section class="cart-sec">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-8 col-md-8 col-12 d-flex justify-content-center">
+        <div class="checkout-your-order bg-danger w-100">
+          <div class="dotted-box-order">
+            <div class="checkout-payment-title">
+                <h3>Devolução</h3>
+            </div>
+            <div class="order-detail">
+
+              <form action="/solicitar_devolucao?venda=<?= $this->view->dados[0]['id'] ?>&usuario=<?= $this->view->dados[0]['id_usuario'] ?>" method="post">
+                               
+                <div style="border: 1px dotted #fff;" class="mb-3 p-1">
+
+                    <div>
+                        <p class="m-0 d-inline-block"><b>Vendedor:</b>&nbsp;</p><p class="m-0 d-inline-block"><?= $this->view->dados[0]['nome'] ?></p>
+                    </div>
+
+                    <div>
+                        <p class="m-0 d-inline-block"><b>Endereço:</b>&nbsp;</p><p class="m-0 d-inline-block"><?= $this->view->dados[0]['endereco'] ?></p>
+                    </div>  
+                    
+                    <div>
+                        <p class="m-0 d-inline-block"><b>Telefone:</b>&nbsp;</p><p class="m-0 d-inline-block"><?= $this->view->dados[0]['telefone'] ?></p>
+                    </div>   
+
+                </div>
+
+                <div style="border: 1px dotted #fff;" class="mb-3 p-1">
+                    <div class="table-responsive">
+                      <table class="table" style="border-top: none;">
+                        <thead>
+                          <tr class="text-white">
+                            <th style="border-top: none;" class="p-1" scope="col-4">Produto</th>
+                            <th style="border-top: none;" class="p-1" scope="col-3">Valor</th>
+                            <th style="border-top: none;" class="p-1 text-center" scope="col-2">Qtd</th>
+                            <th style="border-top: none;" class="p-1" scope="col-3">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <?php foreach($this->view->dados as $produto) {?>
+
+                            <tr>
+                              <td class="py-1"><?= $produto['nome_produto'] ?></td>
+                              <td class="py-1">R$<?= number_format($produto['preco'], 2, ',', '') ?></td>
+                              <td class="py-1 text-center"><?= $produto['quantidade'] ?></td>
+                              <td class="py-1">R$<?= number_format($produto['total'], 2, ',', '') ?></td>
+                            </tr>
+
+                          <?php } ?>                          
+
+
+                          <?php if($this->view->dados[0]['cupom']) {?>
+
+                            <tr style="border-top: 1px solid #FFF;">
+                              <td class="text-start text-white p-1" colspan="4"><b>
+                                Cupom:&nbsp;
+                                - R$<?= number_format($this->view->dados[0]['valor_desconto'], 2, ',', '') ?>
+
+                              </b></td>
+                            </tr>
+
+                          <?php } ?>
+
+                          <tr style="border-top: 1px solid #FFF;" class="pb-0">
+                            <td class="text-start text-white p-1" colspan="4"><b>
+                              Frete:&nbsp;
+                              + R$<?= number_format($this->view->dados[0]['valor_entrega'], 2, ',', '') ?>
+
+                            </b></td>
+                          </tr>
+
+                          <tr style="border-top: 1px solid #FFF;" class="pb-0">
+                            <td class="text-start text-white p-1" colspan="4"><b>
+                              Total:&nbsp;
+                              R$<?= number_format($this->view->dados[0]['total_compra'], 2, ',', '') ?>
+
+                            </b></td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                
+
+                <div style="border: 1px dotted #fff;" class="mb-3 p-1">
+
+                  <p class="mb-2"><b>Motivo da Devolução:</b></p>
+                  
+                    <div class="">
+
+                      <div class="d-block mx-2">
+                      <input type="radio" name="motivo" value="Produto com Defeito" required>
+                      <label for="debito">Produto com Defeito</label>
+                      </div>
+                      
+                      <div class="d-block mx-2">
+                      <input type="radio" name="motivo" value="Não serviu" required>
+                      <label for="credito">Não serviu</label>
+                      </div>
+
+                      <div class="d-block mx-2">
+                      <input type="radio" name="motivo" value="Não corresponde as expectativas" required>
+                      <label for="dinheiro">Não corresponde as expectativas</label>
+                      </div>
+
+                      <div class="d-block mx-2">
+                      <input type="radio" name="motivo" value="Outro" required>
+                      <label for="debito">Outro</label>
+                      </div>
+                      
+                      <div class="d-block mx-2">
+                        <textarea class="textarea-form mb-0" style="border-radius: 10px;" name="comentario" id="comentario" cols="30" rows="2" placeholder="Deixe um comentario"></textarea>
+                      </div>                    
+
+                    </div>
+
+                </div>
+
+                <div class="checkout-btn">
+                  <button class="botao-geral btn-light d-inline-block" style="color: #dc3545!important; cursor: pointer;">Enviar Devolução</button>
+                </div>
+
+              </form>
+
+            </div>
+            
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

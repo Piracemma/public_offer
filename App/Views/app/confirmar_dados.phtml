@@ -1,0 +1,110 @@
+<section class="cart-sec">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-8 col-md-8 col-12 d-flex justify-content-center">
+        <div class="checkout-your-order w-100">
+          <div class="dotted-box-order">
+            <div class="checkout-payment-title">
+                <h3>Dados da Entrega</h3>
+            </div>
+            <div class="order-detail">
+
+              <form action="/finalizar?vendedor=<?= $this->view->vendedor ?>" method="post">
+
+                <p class="d-inline-block mb-0">Endereço:</p>
+                <div class="d-block w-100" id="end"><p style="display: inline-block;" class="mb-0" id="endereco_original"><?= $this->view->endereco ?></p>
+                  <div onclick="alterarEndereco()" id="divAlterar" class="botao-geral btn-light" style="color: #ff7734; cursor: pointer;  display: inline-block;">Alterar Endereço</div>
+                </div>
+                <div onclick="voltarEndereco()" id="divVoltar" class="botao-geral btn-danger mt-1" style="color: #FFF; cursor: pointer; display: none;">Voltar Endereço</div>
+                               
+
+                <p class="mb-0 d-inline-block w-100">Observação:</p>
+                <textarea class="d-block w-100 mb-3" name="observacao" id="observacao" rows="1" style="border-radius: 0.25rem; border: 1px solid #FFF;" placeholder="ex: troco para 100"></textarea>
+                
+                
+
+                <div style="border: 1px dotted #fff;" class="mb-3 p-1">
+
+                  <p class="mb-2"><b>Forma de Pagamento:</b></p>
+                  
+                  <div class="">
+
+                    <div class="d-md-inline-block d-block mx-2">
+                      <input type="radio" name="finalizadora" id="dinheiro" value="1" required>
+                      <label for="dinheiro">Dinheiro</label>
+                    </div>
+
+                    <div class="d-md-inline-block d-block mx-2">
+                      <input type="radio" name="finalizadora" id="debito" value="2" required>
+                      <label for="debito">Cartão de Debito</label>
+                    </div>
+                    
+                    <div class="d-md-inline-block d-block mx-2">
+                      <input type="radio" name="finalizadora" id="credito" value="3" required>
+                      <label for="credito">Cartão de Credito</label>
+                    </div>
+                    
+
+                  </div>
+
+                </div>
+
+                <div class="checkout-btn">
+                  <button class="botao-geral btn-light d-inline-block" style="color: #ff7734; cursor: pointer;">Finalizar</button>
+                </div>
+
+              </form>
+
+            </div>
+            
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  
+  function alterarEndereco() {
+    var divEndereco = document.getElementById("end");
+    var endOriginal = document.getElementById('endereco_original');
+    var divAlterar = document.getElementById('divAlterar');
+    var divVoltar = document.getElementById('divVoltar');
+
+    endOriginal.style.display = 'none';
+    divAlterar.style.display = 'none';
+
+    var input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("name", "endereco");
+    input.setAttribute("id", "endereco");
+    input.setAttribute("placeholder","Rua-N°-Bairro");
+    input.setAttribute("required", "");
+    input.style.borderRadius = '0.25rem';
+    input.style.border = '1px solid #FFF';
+    input.style.width = '100%';
+
+    divEndereco.appendChild(input);
+    
+    divVoltar.style.display = 'inline-block'; 
+  }
+
+  function voltarEndereco() {
+
+    var divEndereco = document.getElementById("end");
+    var endOriginal = document.getElementById('endereco_original');
+    var divAlterar = document.getElementById('divAlterar');
+    var divVoltar = document.getElementById('divVoltar');
+    var input = document.getElementById('endereco');
+
+    endOriginal.style.display = 'inline-block';
+    divAlterar.style.display = 'inline-block';
+    divVoltar.style.display = 'none';
+
+    divEndereco.removeChild(input);
+
+  }
+
+</script>

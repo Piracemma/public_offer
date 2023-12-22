@@ -1,0 +1,185 @@
+
+		<!-- Sign up section -->
+	<style>
+        body {
+            background: #ececec;
+        }
+        
+    </style>	
+<div class="signup-page mt-sm-5 mt-0">
+    <div class="signup-form">
+        <div class="form-title">
+            <h2 class="titulo-form">Cadastro de Produto:</h2>
+        </div>
+        <div class="col-12 d-flex justify-content-center mb-3">
+
+            <?php if(isset($_GET) && isset($_GET['act'])){
+                    
+                    if($_GET['act'] == 'sucesso') {?>
+
+                        <p class="d-block text-success font-weight-bold">Produto cadastrado com Sucesso!</p>
+
+            <?php } if($_GET['act'] == 'erro') {?>
+
+                <p class="d-block text-danger font-weight-bold">Erro ao cadastrar, tente novamente.</p>
+
+            <?php } if($_GET['act'] == 'error_imagem') {?>
+
+                <p class="d-block text-danger font-weight-bold">Imagem Invalida!</p>
+            
+            <?php }}?>
+        </div>
+        <div class="row">
+            <form action="/cadastrar_produto" class="row" method="post" enctype="multipart/form-data">
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label class="label-input" for="nome_produto">Nome do Produto<span> *até 50 caracteres</span></label>
+                <input class="input-tag" type="text" name="nome_produto" id="nome_produto" onkeyup="validaQuantidade()" required>
+                <p id="quantidade-caracter" style="font-size: 12px;">Caracteres restantes: 50</p>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label class="label-input" for="descricao">Descrição do produto</label>
+                <textarea class="textarea-form" name="descricao" id="descricao" required cols="30" rows="4"></textarea>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label class="label-input" for="variacao">Variações<span> *opcional</span></label>
+                <textarea class="textarea-form" name="variacao" id="variacao" cols="30" rows="2"></textarea>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-4 form-group select-form">
+                <label id="categoria" class="label-input  text-number" for="categoria">Categoria</label>
+                <select class="form-control" name="categoria" id="categoria" required>
+                    <option value="moda">Moda</option>
+                    <option value="eletronicos">Eletronicos</option>
+                    <option value="presentes/papelaria">Presentes e Papelaria</option>
+                    <option value="cama/mesa/banho">Cama/Mesa/Banho</option>
+                </select>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-4 form-group select-form">
+                <label id="publico" class="label-input  text-number" for="publico">Publico Principal</label>
+                <select class="form-control" name="publico" id="publico" required>
+                    <option value="todos">Todos</option>
+                    <option value="f">Feminino</option>
+                    <option value="m">Masculino</option>
+                </select>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-2">
+                <label id="preco" class="label-input  text-number" for="preco">Preço<span> *acima de R$10,00</span></label>
+                <input class="input-tag" type="number" step="0.01" name="preco" id="preco" min="10" required>
+            </div>
+            <div class="col-md-12 col-sm-12 mb-4">
+                <label id="estoque" class="label-input text-number" for="estoque">Estoque</label>
+                <input class="input-tag" type="number" step="1" name="estoque" id="estoque" min="1" required>
+            </div>
+
+            <div class="col-md-12 col-sm-12 mb-3">
+                <h5 class="mb-4" style="color: #f34d4d;">*As imagens devem ser quadradas</h5>
+                    <label class="label-input" for="imagem1">Imagem 1<span> *Obrigatorio</span></label>
+                    <input type="file" class="input-img d-none" name="imagem1" id="imagem1" onchange="displayImageInfo(1)" accept="image/*" required>
+                    <label id="image-container1" class="image-container d-flex m-auto justify-content-center" for="imagem1"></label>
+                    <label class="label-input-image" id="label-image1" for="imagem1">                    
+                        <svg class="icon-produto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M17.5531248,16.4450044 C17.6286997,16.179405 17.9052761,16.0253597 18.1708755,16.1009346 C18.4364749,16.1765095 18.5905202,16.4530859 18.5149453,16.7186853 C18.2719275,17.5727439 17.5931039,18.2421122 16.71594,18.4614032 L8.58845447,20.4931921 C7.21457067,20.8106614 5.86688485,19.9801117 5.55483435,18.6278929 L3.45442103,9.52610182 C3.14793844,8.19801056 3.96175966,6.86917188 5.28405996,6.53859681 L7.17308561,6.06634039 C7.44098306,5.99936603 7.71245031,6.16224638 7.77942467,6.43014383 C7.84639904,6.69804129 7.68351869,6.96950853 7.41562123,7.03648289 L5.52659559,7.50873931 C4.7332154,7.70708435 4.24492267,8.50438756 4.42881223,9.30124232 L6.52922555,18.4030334 C6.71644059,19.2142985 7.52497921,19.7125835 8.35461578,19.5209579 L16.4734044,17.4912607 C17.0000615,17.3595964 17.407086,16.9582414 17.5531248,16.4450044 Z M20,13.2928932 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L9.5,4 C8.67157288,4 8,4.67157288 8,5.5 L8,11.2928932 L10.1464466,9.14644661 C10.3417088,8.95118446 10.6582912,8.95118446 10.8535534,9.14644661 L14.5637089,12.8566022 L17.2226499,11.0839749 C17.4209612,10.9517673 17.6850212,10.9779144 17.8535534,11.1464466 L20,13.2928932 L20,13.2928932 Z M19.9874925,14.6945992 L17.4362911,12.1433978 L14.7773501,13.9160251 C14.5790388,14.0482327 14.3149788,14.0220856 14.1464466,13.8535534 L10.5,10.2071068 L8,12.7071068 L8,14.5 C8,15.3284271 8.67157288,16 9.5,16 L18.5,16 C19.2624802,16 19.8920849,15.4310925 19.9874925,14.6945992 L19.9874925,14.6945992 Z M9.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,14.5 C21,15.8807119 19.8807119,17 18.5,17 L9.5,17 C8.11928813,17 7,15.8807119 7,14.5 L7,5.5 C7,4.11928813 8.11928813,3 9.5,3 Z M16,5 L18,5 C18.5522847,5 19,5.44771525 19,6 L19,8 C19,8.55228475 18.5522847,9 18,9 L16,9 C15.4477153,9 15,8.55228475 15,8 L15,6 C15,5.44771525 15.4477153,5 16,5 Z M16,6 L16,8 L18,8 L18,6 L16,6 Z"/>
+                        </svg><p class="d-inline-block">Selecione imagem</p>
+                    </label>
+            </div>
+
+            <div class="col-md-12 col-sm-12 mb-3">
+                <label class="label-input" for="imagem2">Imagem 2<span> *opcional</span></label>
+                    <input type="file" class="input-img d-none" name="imagem2" id="imagem2" onchange="displayImageInfo(2)" accept="image/*">
+                    <label id="image-container2" class="image-container d-flex m-auto justify-content-center" for="imagem2"></label>
+                    <label class="label-input-image" id="label-image2" for="imagem2">                    
+                        <svg class="icon-produto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M17.5531248,16.4450044 C17.6286997,16.179405 17.9052761,16.0253597 18.1708755,16.1009346 C18.4364749,16.1765095 18.5905202,16.4530859 18.5149453,16.7186853 C18.2719275,17.5727439 17.5931039,18.2421122 16.71594,18.4614032 L8.58845447,20.4931921 C7.21457067,20.8106614 5.86688485,19.9801117 5.55483435,18.6278929 L3.45442103,9.52610182 C3.14793844,8.19801056 3.96175966,6.86917188 5.28405996,6.53859681 L7.17308561,6.06634039 C7.44098306,5.99936603 7.71245031,6.16224638 7.77942467,6.43014383 C7.84639904,6.69804129 7.68351869,6.96950853 7.41562123,7.03648289 L5.52659559,7.50873931 C4.7332154,7.70708435 4.24492267,8.50438756 4.42881223,9.30124232 L6.52922555,18.4030334 C6.71644059,19.2142985 7.52497921,19.7125835 8.35461578,19.5209579 L16.4734044,17.4912607 C17.0000615,17.3595964 17.407086,16.9582414 17.5531248,16.4450044 Z M20,13.2928932 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L9.5,4 C8.67157288,4 8,4.67157288 8,5.5 L8,11.2928932 L10.1464466,9.14644661 C10.3417088,8.95118446 10.6582912,8.95118446 10.8535534,9.14644661 L14.5637089,12.8566022 L17.2226499,11.0839749 C17.4209612,10.9517673 17.6850212,10.9779144 17.8535534,11.1464466 L20,13.2928932 L20,13.2928932 Z M19.9874925,14.6945992 L17.4362911,12.1433978 L14.7773501,13.9160251 C14.5790388,14.0482327 14.3149788,14.0220856 14.1464466,13.8535534 L10.5,10.2071068 L8,12.7071068 L8,14.5 C8,15.3284271 8.67157288,16 9.5,16 L18.5,16 C19.2624802,16 19.8920849,15.4310925 19.9874925,14.6945992 L19.9874925,14.6945992 Z M9.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,14.5 C21,15.8807119 19.8807119,17 18.5,17 L9.5,17 C8.11928813,17 7,15.8807119 7,14.5 L7,5.5 C7,4.11928813 8.11928813,3 9.5,3 Z M16,5 L18,5 C18.5522847,5 19,5.44771525 19,6 L19,8 C19,8.55228475 18.5522847,9 18,9 L16,9 C15.4477153,9 15,8.55228475 15,8 L15,6 C15,5.44771525 15.4477153,5 16,5 Z M16,6 L16,8 L18,8 L18,6 L16,6 Z"/>
+                        </svg><p class="d-inline-block">Selecione imagem</p>
+                    </label>      
+            </div>
+
+            <div class="col-md-12 col-sm-12 mb-3">
+                <label class="label-input" for="imagem3">Imagem 3<span> *opcional</span></label>
+                <input type="file" class="input-img d-none" name="imagem3" id="imagem3" onchange="displayImageInfo(3)" accept="image/*">
+                <label id="image-container3" class="image-container d-flex m-auto justify-content-center" for="imagem3"></label>
+                <label class="label-input-image" id="label-image3" for="imagem3">                    
+                <svg class="icon-produto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M17.5531248,16.4450044 C17.6286997,16.179405 17.9052761,16.0253597 18.1708755,16.1009346 C18.4364749,16.1765095 18.5905202,16.4530859 18.5149453,16.7186853 C18.2719275,17.5727439 17.5931039,18.2421122 16.71594,18.4614032 L8.58845447,20.4931921 C7.21457067,20.8106614 5.86688485,19.9801117 5.55483435,18.6278929 L3.45442103,9.52610182 C3.14793844,8.19801056 3.96175966,6.86917188 5.28405996,6.53859681 L7.17308561,6.06634039 C7.44098306,5.99936603 7.71245031,6.16224638 7.77942467,6.43014383 C7.84639904,6.69804129 7.68351869,6.96950853 7.41562123,7.03648289 L5.52659559,7.50873931 C4.7332154,7.70708435 4.24492267,8.50438756 4.42881223,9.30124232 L6.52922555,18.4030334 C6.71644059,19.2142985 7.52497921,19.7125835 8.35461578,19.5209579 L16.4734044,17.4912607 C17.0000615,17.3595964 17.407086,16.9582414 17.5531248,16.4450044 Z M20,13.2928932 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L9.5,4 C8.67157288,4 8,4.67157288 8,5.5 L8,11.2928932 L10.1464466,9.14644661 C10.3417088,8.95118446 10.6582912,8.95118446 10.8535534,9.14644661 L14.5637089,12.8566022 L17.2226499,11.0839749 C17.4209612,10.9517673 17.6850212,10.9779144 17.8535534,11.1464466 L20,13.2928932 L20,13.2928932 Z M19.9874925,14.6945992 L17.4362911,12.1433978 L14.7773501,13.9160251 C14.5790388,14.0482327 14.3149788,14.0220856 14.1464466,13.8535534 L10.5,10.2071068 L8,12.7071068 L8,14.5 C8,15.3284271 8.67157288,16 9.5,16 L18.5,16 C19.2624802,16 19.8920849,15.4310925 19.9874925,14.6945992 L19.9874925,14.6945992 Z M9.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,14.5 C21,15.8807119 19.8807119,17 18.5,17 L9.5,17 C8.11928813,17 7,15.8807119 7,14.5 L7,5.5 C7,4.11928813 8.11928813,3 9.5,3 Z M16,5 L18,5 C18.5522847,5 19,5.44771525 19,6 L19,8 C19,8.55228475 18.5522847,9 18,9 L16,9 C15.4477153,9 15,8.55228475 15,8 L15,6 C15,5.44771525 15.4477153,5 16,5 Z M16,6 L16,8 L18,8 L18,6 L16,6 Z"/>
+                </svg><p class="d-inline-block">Selecione imagem</p>
+                </label>    
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="botao-form">Cadastrar</button>
+            </div>
+            
+            </form>            
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function validaQuantidade() {
+
+        var inputNome = document.getElementById('nome_produto');
+        var quantidadeCarac = document.getElementById('quantidade-caracter');
+        var valorNome = inputNome.value;
+
+        if(valorNome.length > 50) {
+
+            quantidadeCarac.innerHTML = '';
+            quantidadeCarac.innerHTML = 'Excedeu a quantidade!';
+            quantidadeCarac.style.color = 'red';
+
+        } else {
+
+            quantidadeCarac.innerHTML = '';
+            quantidadeCarac.innerHTML = 'Caracteres restantes: '+(50-valorNome.length);
+            quantidadeCarac.style.color = '#444444';
+
+        }
+    }
+   
+    function displayImageInfo(numImg) {
+        const fileInput = document.getElementById('imagem' + numImg);
+        const imageContainer = document.getElementById('image-container' + numImg);
+        const imageSelectedMessage = document.getElementById('image-selected-message' + numImg);
+        const imageLabel = document.getElementById('label-image' + numImg);
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.id = 'img' + numImg;
+
+                img.onload = function () {
+                    const width = img.width;
+                    const height = img.height;
+
+                    if (width / height < 0.97 || width / height > 1.03) {
+                        imageContainer.innerHTML = ''; // Limpa a imagem
+                        imageLabel.innerHTML = 'Formato inválido! Clique aqui e selecione outra.'; // Exibe mensagem de formato inválido
+                        imageContainer.style.display = 'none';
+                        imageLabel.style.display = 'block';
+                        imageLabel.style.color = '#f34d4d';
+                    } else {
+                        imageContainer.innerHTML = ''; // Limpa a imagem
+                        imageLabel.textContent = '';
+                        imageContainer.appendChild(img);
+                        imageSelectedMessage.textContent = ''; // Limpa a mensagem de formato inválido
+                        imageContainer.style.display = 'block';
+                        imageLabel.style.display = 'none';
+                    }
+                };
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            imageContainer.style.display = 'none';
+            imageLabel.style.display = 'block';
+            const remover = document.getElementById('img' + numImg);
+            remover.style.display = 'none';
+        }
+    }
+
+</script>
+		

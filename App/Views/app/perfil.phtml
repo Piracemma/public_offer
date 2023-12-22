@@ -1,0 +1,309 @@
+<div class="container-fluid mt-3">
+
+    <div class="row">
+
+        <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+
+            <div class="main-sidebar">
+
+                <div class="categories">
+                
+                    <ul>
+
+                        <li>
+                            <a href="/perfil?pagina=minhas_compras" <?php if((isset($_GET['pagina']) && $_GET['pagina'] == 'minhas_compras') || !isset($_GET['pagina'])) { ?> style="color: #4311A4;"<?php } ?>>Minhas Compras</a>
+                        </li>
+                        <li>
+                            <a href="/sair" style="color: #f34d4d;">Sair</a>
+                        </li>
+                                                                            
+                    </ul>
+
+                </div>
+
+            </div>            
+
+        </div>
+
+        <div class="col-lg-9 col-md-12 col-sm-12 col-12">
+
+                <?php if(!empty($this->view->compras)) {?>
+                
+                    <div class="container">
+                        <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="faq-content">
+                            
+                                <?php foreach($this->view->compras as $key => $compra) {
+                                
+                                    $preco = $compra['resumo']['total_compra'];
+                                    $precoFormatado = number_format($preco, 2, ',', '');
+                                    $status = array(
+                                        0 => array(
+                                            'color' => 'text-danger',
+                                            'texto' => 'Cancelado'
+                                        ),
+                                        1 => array(
+                                            'color' => 'text-success',
+                                            'texto' => 'Aprovado'
+                                        ),
+                                        2 => array(
+                                            'color' => 'text-warning',
+                                            'texto' => 'Pendente'
+                                        ),
+                                        3 => array(
+                                            'color' => 'text-danger',
+                                            'texto' => 'Devolução'
+                                        ),
+                                    );
+                                
+                                ?>
+
+                                    <div class="faq-accordion accord-faq<?= $key ?>" <?php if($compra['resumo']['status'] == 3) {?> style="border: 2px solid #dc3545;" <?php } ?>>
+                                        <button class="accordion accord<?= $key ?>"><p class="d-inline-block m-0 <?= $status[$compra['resumo']['status']]['color'] ?>"><?= $status[$compra['resumo']['status']]['texto'] ?></p> - <?= $compra['resumo']['vendedor'] ?> - <?= $compra['resumo']['data_venda'] ?> - R$<?= $precoFormatado ?></button>
+                                        <div class="panel fadeinleft w-100">
+
+                                            <?php if($compra['resumo']['status'] == 3) {?>
+                                                <div class="container-fluid bg-danger p-2 text-white mt-2">
+
+                                                    <div style="border: 1px dotted #fff;" class="p-2">
+                                                    
+                                                        <h4 class="mb-0">Entre em contato com o Vendedor:</h4>
+                                                        <p class="text-white p-1">Nome: <b><?= $compra['resumo']['vendedor'] ?></b></p>
+                                                        <p class="text-white p-1">Endereço: <b><?= $compra['resumo']['endereco_vendedor'] ?></b></p>
+                                                        <p class="text-white p-1">Telefone: <b><?= $compra['resumo']['telefone_vendedor'] ?></b></p>
+
+                                                        <div class="table-responsive">
+                                                            <table class="table" style="border-top: none;">
+                                                                <thead>
+                                                                <tr class="text-white">
+                                                                    <th style="border-top: none;" class="p-1" scope="col-4">Produto</th>
+                                                                    <th style="border-top: none;" class="p-1" scope="col-3">Valor</th>
+                                                                    <th style="border-top: none;" class="p-1 text-center" scope="col-2">Qtd</th>
+                                                                    <th style="border-top: none;" class="p-1" scope="col-3">Total</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                <?php foreach($compra['itens'] as $produto) {?>
+
+                                                                    <tr>
+                                                                    <td class="py-1 text-white"><?= $produto['nome_produto'] ?></td>
+                                                                    <td class="py-1 text-white">R$<?= number_format($produto['preco'], 2, ',', '') ?></td>
+                                                                    <td class="py-1 text-white text-center"><?= $produto['quantidade'] ?></td>
+                                                                    <td class="py-1 text-white">R$<?= number_format($produto['total'], 2, ',', '') ?></td>
+                                                                    </tr>
+
+                                                                <?php } ?>                          
+
+
+                                                                <?php if($compra['resumo']['cupom']) {?>
+
+                                                                    <tr style="border-top: 1px solid #FFF;">
+                                                                    <td class="text-start text-white p-1" colspan="4"><b>
+                                                                        Cupom:&nbsp;
+                                                                        - R$<?= number_format($compra['resumo']['valor_desconto'], 2, ',', '') ?>
+
+                                                                    </b></td>
+                                                                    </tr>
+
+                                                                <?php } ?>
+
+                                                                <tr style="border-top: 1px solid #FFF;" class="pb-0">
+                                                                    <td class="text-start text-white p-1" colspan="4"><b>
+                                                                    Frete:&nbsp;
+                                                                    + R$<?= number_format($compra['resumo']['valor_entrega'], 2, ',', '') ?>
+
+                                                                    </b></td>
+                                                                </tr>
+
+                                                                <tr style="border-top: 1px solid #FFF;" class="pb-0">
+                                                                    <td class="text-start text-white p-1" colspan="4"><b>
+                                                                    Total:&nbsp;
+                                                                    R$<?= number_format($compra['resumo']['total_compra'], 2, ',', '') ?>
+
+                                                                    </b></td>
+                                                                </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            <?php } else {?>
+
+                                            <div class="table-responsive mt-2">
+                                                <table class="table ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-2">Id</th>
+                                                            <th class="col-4">Produto</th>
+                                                            <th class="col-2">Preço</th>
+                                                            <th class="col-2">Qtd</th>
+                                                            <th class="col-2">Subtotal</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <?php foreach($compra['itens'] as $key2 => $item) {?>
+
+                                                            <tr>
+                                                                <td><?= $item['id_produto'] ?></td>
+                                                                <td><?= $item['nome_produto'] ?></td>
+                                                                <td>R$<?php 
+                                        
+                                                                    $precoitem = $item['preco'];
+                                                                    $precoitemFormatado = number_format($precoitem, 2, ',', '');
+
+                                                                    echo $precoitemFormatado;
+
+                                                                    ?>
+                                                                </td>
+                                                                <td><?= $item['quantidade'] ?></td>
+                                                                <td>R$<?php 
+                                        
+                                                                    $subitem = $item['total'];
+                                                                    $subitemFormatado = number_format($subitem, 2, ',', '');
+
+                                                                    echo $subitemFormatado;
+
+                                                                    ?>
+                                                                </td>
+                                                            </tr>
+                                                            <?php if(isset($item['observacao_item']) && !empty($item['observacao_item'])) {?>
+                                                                <tr>
+                                                                    <td style="padding: 0px 5px 5px 5px !important; color: #ff7734;"><small>Observação:</small></td>
+                                                                    <td colspan="4" style="padding: 0px 5px 5px 5px !important; color: #ff7734;"><small><?= $item['observacao_item'] ?></small></td>                                                    
+                                                                </tr>
+                                                            <?php } ?>
+                                                        
+                                                        <?php } ?>
+
+                                                        <?php if($compra['resumo']['cupom']) {?>
+                                                            <tr>
+                                                                <td><b>Cupom</b></td>
+                                                                <td><b>- R$<?php 
+                                            
+                                                                    $cupom = $compra['resumo']['valor_desconto'];
+                                                                    $cupomFormatado = number_format($cupom, 2, ',', '');
+
+                                                                    echo $cupomFormatado;
+
+                                                                    ?></b>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        <?php } ?>
+
+                                                        <tr>
+                                                            <td><b>Frete</b></td>
+                                                            <td><b>R$<?php 
+                                        
+                                                                $frete = $compra['resumo']['valor_entrega'];
+                                                                $freteFormatado = number_format($frete, 2, ',', '');
+
+                                                                echo $freteFormatado;
+
+                                                                ?></b>
+                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Total</b></td>
+                                                            <td><b>R$<?= $precoFormatado ?></b>
+                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="mb-3">
+                                                <p class="p-0">Forma de Pagamento: <?= $compra['resumo']['finalizadora'] ?></p>
+                                                <p class="p-0">Endereço: <?= $compra['resumo']['endereco'] ?></p>
+                                                <?php if(isset($compra['resumo']['observacao_compra']) && !empty($compra['resumo']['observacao_compra'])) {?>
+                                                    <p class="p-0">Observacao: <?= $compra['resumo']['observacao_compra'] ?></p>
+                                                <?php } ?>
+                                            </div>          
+
+                                            <?php if($compra['resumo']['status'] == 1 && $compra['resumo']['diferenca_dias'] <= 7) {?>
+                                                <a href="/devolucao?venda=<?= $compra['resumo']['id_venda'] ?>&usuario=<?= $compra['resumo']['usuario'] ?>" class="btn-cancel p-2" style="font-size: 10px !important;" id="cancelar<?= $compra['resumo']['id_venda'] ?>">Solicitar Devolução</a>
+                                            <?php } ?>
+
+                                            <?php } ?>
+                                            
+                                        </div>
+                                    </div>
+
+                                <?php } ?>
+
+                                
+
+
+                            </div>
+                        </div>
+                        </div>
+                        <!-- Pagination -->
+                        <?php if($this->view->total_paginas > 1) {?>
+
+                            <ul class="pagination">
+                            <?php if(isset($_GET['page']) && $_GET['page'] > 1) {?>
+
+                            <li class="pageNumber">
+                                <a href="/perfil?pagina=minhas_compras" class="prev">
+                                    <p
+                                        class="ti-angle-double-left"></p>
+                                </a>
+                            </li>
+
+                            <?php } ?>
+
+                            <?php 
+
+                                $pagina_atual = $this->view->pagina_atual;
+                                $range = $this->view->range_paginas;
+                                $inicio = max($pagina_atual - $range, 1);
+                                $final = min($pagina_atual + $range, $this->view->total_paginas);
+
+                                for($i = $inicio; $i <= $final; $i++) {
+
+                            ?>
+
+                            <li class="pageNumber <?php if($i == $pagina_atual) {?> active <?php } ?>">
+                                <a href="/perfil?pagina=minhas_compras&page=<?= $i ?>">
+                                    <p><?= $i ?></p>
+                                </a>
+                            </li>
+
+                            <?php } ?>
+                            
+
+                            <?php if(!isset($_GET['page']) || $_GET['page'] != $this->view->total_paginas) {?>
+                            <li class="pageNumber">
+                                <a href="/perfil?pagina=minhas_compras&page=<?= $this->view->total_paginas ?>" class="next">
+                                    <p
+                                        class="ti-angle-double-right"></p>
+                                </a>
+                            </li>
+                            <?php } ?>
+                            </ul>
+
+                        <?php } ?>
+                    </div>
+
+                <?php } ?>
+
+        </div>
+
+    </div>
+
+</div>

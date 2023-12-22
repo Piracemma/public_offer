@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatorio</title>
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="<?= HOST_APLIC ?>assets/css/vendor/bootstrap.css">
+    <style>
+        .totais p {
+            font-size: 17px;
+            border-bottom: 1px solid #999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5 totais">
+        <button id="printbtn" class="btn btn-dark mb-3">Imprimir/Salvar</button>
+        <div class="row">
+            <div class="col">
+
+                <h1 class="mb-3"><?= $this->view->vendedor['nome'] ?></h1>
+
+                <h4>Totais</h4>
+
+                <?php if($this->view->totais['geral']['quantidade'] > 0) { ?>
+                    <p><b>Total</b> de Vendas: <?= $this->view->totais['geral']['quantidade'] ?> - <b>R$<?= number_format($this->view->totais['geral']['total_geral'], 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->totais['aprovadas']['quantidade'] > 0) { ?>
+                    <p>Vendas <b>Aprovadas</b>: <?= $this->view->totais['aprovadas']['quantidade'] ?> - <b>R$<?= number_format($this->view->totais['aprovadas']['total_aprovada'], 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->totais['canceladas']['quantidade'] > 0) { ?>
+                    <p>Vendas <b>Canceladas</b>: <?= $this->view->totais['canceladas']['quantidade'] ?> - <b>R$<?= number_format($this->view->totais['canceladas']['total_cancelada'], 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->totais['devolvidas']['quantidade'] > 0) { ?>
+                    <p>Vendas <b>Devolvidas</b>: <?= $this->view->totais['devolvidas']['quantidade'] ?> - <b>R$<?= number_format($this->view->totais['devolvidas']['total_devolvida'], 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->totais['comissao']['quantidade'] > 0) { ?>
+                    <p><b>Comissão</b> das Vendas: <b>R$<?= number_format($this->view->totais['comissao']['total_comissao'], 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->fretes['total_frete']['quantidade'] > 0) { ?>
+                    <p><b>Repasse</b> do Frete: <?= $this->view->fretes['total_frete']['quantidade'] ?> - <b>R$<?php $total_frete = $this->view->fretes['total_frete']['quantidade']*ENTREGA_VENDEDOR_CASSIA; echo number_format($total_frete, 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->fretes['total_frete']['quantidade'] > 0) { ?>
+                    <p>Frete Recebido do <b>Comprador</b>: <?= $this->view->fretes['total_frete']['quantidade'] ?> - <b>R$<?php $total_frete = $this->view->fretes['total_frete']['quantidade']*FRETE_CASSIA; echo number_format($total_frete, 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php if($this->view->fretes['total_frete_devolvido']['quantidade'] > 0) { ?>
+                    <p>Frete de Vendas <b>Devolvidas</b>: <?= $this->view->fretes['total_frete_devolvido']['quantidade'] ?> - <b>R$<?php $total_frete_devolvido = $this->view->fretes['total_frete_devolvido']['quantidade']*FRETE_CASSIA; echo number_format($total_frete_devolvido, 2, ',', '') ?></b></p>
+                <?php } ?>
+
+                <?php 
+                    $comissao = $this->view->totais['comissao']['quantidade'] > 0 ? $this->view->totais['comissao']['total_comissao'] : 0.00;
+                    $frete_vendedor = $this->view->fretes['total_frete']['quantidade'];
+                    $frete_devolucao = $this->view->fretes['total_frete_devolvido']['quantidade'];
+
+                    $total_repasse = $comissao + ($frete_vendedor * ENTREGA_VENDEDOR_CASSIA) + ($frete_vendedor * FRETE_CASSIA) - ($frete_devolucao * FRETE_CASSIA);
+                ?>
+                <p>Total a Pagar para Offer do Periodo <small>(Comissão das Vendas + Repasse do Frete + Frete Recebido do Comprador - Frete de Vendas Devolvidas)</small>: <b>R$<?= number_format($total_repasse, 2, ',', '') ?></b></p>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3" style="font-size: 13px !important;">
+        <div class="row">
+            <div class="col">
+                <h4>Vendas</h4>
+                <div class="cabecalho">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-1"><b>#ID</b></div>
+                            <div class="col-1"><b>Data</b></div>
+                            <div class="col-1"><b>Produtos</b></div>
+                            <div class="col-2"><b>Frete</b></div>
+                            <div class="col-2"><b>Cupom</b></div>
+                            <div class="col-1"><b>Total</b></div>
+                            <div class="col-2"><b>Situação</b></div>
+                            <div class="col-1"><b>Comissão</b></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vendas">
+                    <?php
+                    if(!empty($this->view->vendas)) {
+                        $status = [
+                            0 => 'CANCELADA',
+                            1 => 'APROVADA',
+                            3 => 'DEVOLVIDA'
+                        ];
+                        foreach($this->view->vendas as $venda) {
+                            $situacao = $status[$venda['aprovado']];
+                            if($status[$venda['aprovado']] == 'CANCELADA' || $status[$venda['aprovado']] == 'DEVOLVIDA') {
+                                $situacao .= ' - ' . $venda['motivo_cancelamento'];
+                            }                            
+                    ?>
+
+                        <div class="container mb-2 pt-2" style="border-top: 1px solid #999;">
+                            <div class="row">
+                                <div class="col-1"><?= $venda['id'] ?></div>
+                                <div class="col-1">
+                                    <?php
+                                        $data = date_create($venda['data_venda']);
+                                        echo date_format($data, 'd/m/Y');
+                                    ?>
+                                </div>
+                                <div class="col-1">R$<?= number_format($venda['total_produtos'], 2, ',', '') ?></div>
+                                <div class="col-2"><?= $venda['entrega_propria'] ? 'Própria - R$' . number_format($venda['valor_entrega'], 2, ',', '') : 'Offer - R$' . number_format($venda['valor_entrega'], 2, ',', '') ?></div>
+                                <?php if($venda['cupom']) { ?>
+                                    <div class="col-2"><?= strtoupper($venda['nome_cupom']) ?> - R$<?= number_format($venda['valor_desconto'], 2, ',', '') ?></div>
+                                <?php } else {?>
+                                    <div class="col-2"> - </div>
+                                <?php } ?>
+                                <div class="col-1">R$<?= number_format($venda['total_compra'], 2, ',', '') ?></div>
+                                <div class="col-2"><?= $situacao ?></div>
+                                <div class="col-1">R$<?= number_format($venda['comissao'], 2, ',', '') ?></div>
+                            </div>
+                        </div>
+
+                    <?php }} ?>
+                    
+                </div>
+            </div>
+        </div>
+        <button id="printbtn1" class="btn btn-dark my-5">Imprimir/Salvar</button>
+    </div>
+    
+
+    
+
+    <script>
+
+        const printbtn = document.getElementById('printbtn');
+        const printbtn1 = document.getElementById('printbtn1');
+        printbtn.addEventListener("click", () => {
+            printbtn.style.display = 'none';
+            printbtn1.style.display = 'none';
+            window.print();
+            setTimeout(()=> {
+                printbtn.style.display = 'block';
+                printbtn1.style.display = 'block';
+            }, 500);
+        });
+        printbtn1.addEventListener("click", () => {
+            printbtn.style.display = 'none';
+            printbtn1.style.display = 'none';
+            window.print();
+            setTimeout(()=> {
+                printbtn.style.display = 'block';
+                printbtn1.style.display = 'block';
+            }, 500);
+        });
+
+    </script>
+
+</body>
+</html>

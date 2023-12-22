@@ -1,0 +1,1228 @@
+<div style="height: 100vh;">
+			<div class="signup-page"  id="inicial">
+				<div class="signup-form" id="form" action="/registrar_vendedor" method="post" enctype="multipart/form-data">
+					<div class="form-title">
+						<h2>Cadastre-se</h2>
+						<?php if(isset($this->view->usuario['erro']) || isset($this->view->vendedor['erro'])) { ?>
+							<p class="text-danger">Erro no cadastramento, tente novamente!</p>
+						<?php } ?>
+            <?php if(isset($_GET['erro']) && $_GET['erro'] == 'erro_imagem') { ?>
+							<p class="text-danger">A imagem deve ser quadrada!</p>
+						<?php } ?>
+					</div>
+					<div class="row mb-5">
+
+
+						<div id="bloco" class="d-flex col-12 justify-content-center">
+							<div class="col-6 d-flex justify-content-center">
+								<div id="botaousuario" onclick="usuarioBloco()" class="btn">Usuario</div>
+							</div>
+							<div class="col-6 d-flex justify-content-center">
+								<div id="botaovendedor" onclick="vendedorBloco()" class="btn">Vendedor</div>
+							</div>
+						</div>
+
+
+					</div>
+					<p class="message">Já possui conta? <a href="/login">Faça o Login.</a></p>
+                </div>
+			</div>
+
+            <div class="signup-page" id="usuario">
+				<form class="signup-form" id="form" action="/registrar_usuario" method="POST">
+					<div class="form-title">
+						<h2>Usuario</h2>
+					</div>
+					<div class="row mb-5">
+
+
+						<div id="bloco1u" class="row">
+							<div class="col-md-6 col-sm-12">
+                                <label class="label-input" for="nome">Nome</label>
+								<input class="input-tag" type="text" name="nome" id="nome" <?php if(isset($this->view->usuario) && isset($this->view->usuario['nome'])) {?>value="<?= $this->view->usuario['nome'] ?>"<?php } ?> required>
+							</div>
+							<div class="col-md-6 col-sm-12">
+                                <label class="label-input" for="email">E-mail</label>
+								<?php if(isset($this->view->usuario) && isset($this->view->usuario['erro']) && $this->view->usuario['erro'] == 'usuarioexistente') {?>
+                                <small class="text-danger">*E-mail já cadastrado.</small>
+                                <?php } ?>
+								<input class="input-tag" type="email" name="email" id="email" <?php if(isset($this->view->usuario) && isset($this->view->usuario['nome'])) {?>value="<?= $this->view->usuario['email'] ?>"<?php } ?> required>								
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="senha">Senha</label>
+								<input onkeyup="verificaU(),validaSenhaRegexU()" onblur="limpaSmalU()" class="input-tag" type="password" name="senha" id="senhau" required>
+								<svg id="senha1u" onclick="alternarTipoSenhaU()" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye senha"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+								<svg id="senha2u" onclick="alternarTipoSenhaU()" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off senha"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+								<small class="text-danger" id="conferesenharegexu">*A senha deve conter de 8 a 20 caracteres com: 1 maiuscula, 1 minuscula, 1 numero e 1 caractere especial (@$!%*?&#/).</small>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="validasenha">Confirmar Senha</label>
+								<input onkeyup="validaSenhaU()" class="input-tag" type="password" name="validasenha" id="validasenhau" required>
+								<svg id="senha3u" onclick="alternarTipoSenha2U()" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye senha"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+								<svg id="senha4u" onclick="alternarTipoSenha2U()" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off senha"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+								<small class="text-danger" id="conferesenhau">*As senhas não conferem</small>
+							</div>
+						</div>
+
+
+						<div id="bloco2u" class="row">
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="documento">CPF</label>
+								<input onkeyup="validadedocU()" onblur="limpaDocU()" class="input-tag" type="text" name="documento" id="documentou" <?php if(isset($this->view->usuario) && isset($this->view->usuario['documento'])) {?>value="<?= $this->view->usuario['documento'] ?>"<?php } ?> required>
+								<small class="text-danger" id="conferedocumentou">*CPF invalido.</small>
+							</div>
+							<div class="col-md-6 col-sm-12">
+                                <label class="label-input" for="telefone">Telefone<span> *35988776655 (sem 0)</span></label>
+								<input class="input-tag" type="text" name="telefone" id="telefone" minlength="10" maxlength="11" <?php if(isset($this->view->usuario) && isset($this->view->usuario['telefone'])) {?>value="<?= $this->view->usuario['telefone'] ?>"<?php } ?> required>
+							</div>
+						</div>
+
+
+						<div id="bloco3u" class="row">                            
+							<div class="col-md-6 col-sm-12 select-form">
+								<label class="label-input" for="cidade">Cidade</label>
+								<select class="input-tag form-control" name="cidade" id="cidade">
+									<option>Cidade</option>
+									<option value="cassia" selected>Cássia - MG</option>
+								</select>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="endereco">Endereço</label>
+								<input class="input-tag" type="text" name="endereco" id="endereco" <?php if(isset($this->view->usuario) && isset($this->view->usuario['endereco'])) {?>value="<?= $this->view->usuario['endereco'] ?>"<?php } ?> required>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="bairro">Bairro</label>
+								<input class="input-tag" type="text" name="bairro" id="bairro" <?php if(isset($this->view->usuario) && isset($this->view->usuario['bairro'])) {?>value="<?= $this->view->usuario['bairro'] ?>"<?php } ?> required>
+							</div>
+                            <div class="col-md-6 col-sm-12">
+                                <label class="label-input" for="end_referencia">Referencia<span> *opcional</span></label>
+								<input class="input-tag" type="text" name="end_referencia" id="end_referencia" <?php if(isset($this->view->usuario) && isset($this->view->usuario['nome'])) {?>value="<?= $this->view->usuario['end_referencia'] ?>"<?php } ?>>
+							</div>
+						</div>
+
+
+						<div id="bloco5u" class="d-flex col-12 justify-content-center p-0">
+							<div class="col-6 d-flex justify-content-start p-0">
+								<div id="voltaru" onclick="voltaruBloco()" class="btn">&#60; Voltar</div>
+							</div>
+							<div class="col-6 d-flex justify-content-end p-0">
+								<div id="avancaru" onclick="avancaruBloco()" class="btn">Avançar &#62;</div>
+							</div>
+							<input type="hidden" id="pageu" value="">
+						</div>
+
+
+					</div>
+
+					<div style="font-size: 15px; color: #999;" id="termosu">
+					  <input style="width: 20px;" type="checkbox" name="aceita-termos" value="sim" required>Aceito os <a href="/termos_e_condicoes" target="_blank">Termos e Condições de Uso</a>.
+          </div>
+					<button id="botaou" class="botao-form">Inscreva-se</button>
+					<p class="message">Já possui conta? <a href="/login">Faça o Login.</a></p>
+				</form>
+			</div>
+
+            <div class="signup-page" id="vendedor">
+				<form class="signup-form" id="form" action="/registrar_vendedor" method="post" enctype="multipart/form-data">
+					<div class="form-title">
+						<h2>Vendedor</h2>
+					</div>
+					<div class="row mb-5">
+
+
+						<div id="bloco1v" class="row">
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="nome">Nome Loja</label>
+								<input type="text" name="nome" id="nome" placeholder="Nome Loja" required <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['nome'])) {?>value="<?= $this->view->vendedor['nome'] ?>"<?php } ?>>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="email">E-mail</label>
+								<?php if(isset($this->view->vendedor) && isset($this->view->vendedor['erro']) && $this->view->vendedor['erro'] == 'usuarioexistente') {?>
+									<small class="text-danger">*E-mail já cadastrado.</small>
+								<?php } ?>
+								<input type="email" placeholder="email@email.com" name="email" id="email" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['email'])) {?>value="<?= $this->view->vendedor['email'] ?>"<?php } ?> required>
+								
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="senha">Senha</label>
+								<input onkeyup="verificaV(),validaSenhaRegexV()" onblur="limpaSmalV()" class="input-tag" type="password" name="senha" id="senhav" required>
+								<svg id="senha1v" onclick="alternarTipoSenhaV()" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye senha"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+								<svg id="senha2v" onclick="alternarTipoSenhaV()" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off senha"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+								<small class="text-danger" id="conferesenharegexv">*A senha deve conter de 8 a 20 caracteres com: 1 maiuscula, 1 minuscula, 1 numerov e 1 caractere especial (@$!%*?&#/).</small>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="validasenha">Confirmar Senha</label>
+								<input onkeyup="validaSenhaV()" class="input-tag" type="password" name="validasenha" id="validasenhav" required>
+								<svg id="senha3v" onclick="alternarTipoSenha2V()" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye senha"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+								<svg id="senha4v" onclick="alternarTipoSenha2V()" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off senha"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+								<small class="text-danger" id="conferesenhav">*As senhas não conferem</small>
+							</div>
+						</div>
+
+
+						<div id="bloco2v" class="row">
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="documento">CPF/CNPJ</label>
+								<input onkeyup="validadedocV()" onblur="limpaDocV()" class="input-tag" type="text" name="documento" id="documentov" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['documento'])) {?>value="<?= $this->view->vendedor['documento'] ?>"<?php } ?> required>
+								<small class="text-danger" id="conferedocumentov">*CPF/CNPJ invalido.</small>
+							</div>
+							<div class="col-md-6 col-sm-12 select-form">
+								<label class="label-input" for="cidade">Cidade</label>
+								<select class="input-tag form-control" name="cidade" id="cidade">
+									<option>Cidade</option>
+									<option value="cassia" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['cidade']) && $this->view->vendedor['cidade'] == 'cassia') {?> selected <?php } ?>>Cássia - MG</option>
+								</select>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="endereco">Endereço</label>
+								<input class="input-tag" type="text" name="endereco" id="endereco" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['endereco'])) {?>value="<?= $this->view->vendedor['endereco'] ?>"<?php } ?> required>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="bairro">Bairro</label>
+								<input class="input-tag" type="text" name="bairro" id="bairro" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['bairro'])) {?>value="<?= $this->view->vendedor['bairro'] ?>"<?php } ?> required>
+							</div>
+						</div>
+
+
+						<div id="bloco3v" class="row">
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="telefone">Telefone<span> *35988776655</span></label>
+								<input class="input-tag" type="text" name="telefone" id="telefone" minlength="10" maxlength="11" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['telefone'])) {?>value="<?= $this->view->vendedor['telefone'] ?>"<?php } ?> required>
+							</div>
+							<div class="col-md-6 col-sm-12 select-form">
+								<label id="entrega" class="label-input  text-number" for="segmento">Segmento Principal</label>
+								<select class="input-tag form-control" name="segmento" id="segmento">
+									<option value="segmento" <?php if(!isset($this->view->vendedor)) {?> selected <?php } ?>>Segmento Principal</option>
+									<option value="moda" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['segmento']) && $this->view->vendedor['segmento'] == 'moda') {?> selected <?php } ?>>Moda</option>
+									<option value="eletronicos" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['segmento']) && $this->view->vendedor['segmento'] == 'eletronicos') {?> selected <?php } ?>>Eletronicos</option>
+									<option value="presentes/papelaria" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['segmento']) && $this->view->vendedor['segmento'] == 'presentes/papelaria') {?> selected <?php } ?>>Presentes e Papelaria</option>
+									<option value="cama/mesa/banho" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['segmento']) && $this->view->vendedor['segmento'] == 'cama/mesa/banho') {?> selected <?php } ?>>Cama/Mesa/Banho</option>
+								</select>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input d-block" for="entrega_propria">Possui Entrega Propria?</label>
+								<div class="d-inline-block">
+									<input class="input-tag-radio" type="radio" name="entrega_propria" id="entrega-s" value="s" required><label class="label-input-radio" for="entrega_propria">Sim</label>
+								</div>
+								<div class="d-inline-block">
+									<input class="input-tag-radio" type="radio" name="entrega_propria" id="entrega-n" value="n" required checked><label class="label-input-radio" for="entrega_propria">Não</label>   
+								</div>
+							</div>
+							
+							<div class="col-md-6 col-sm-12">
+								<label id="entrega" class="label-input  text-number" for="valor_entrega">Valor da entrega</label>
+								<input class="input-tag mb-0" type="number" step="0.01" name="valor_entrega" id="valor_entrega" <?php if(isset($this->view->vendedor) && isset($this->view->vendedor['valor_entrega'])) {?>value="<?= $this->view->vendedor['valor_entrega'] ?>"<?php } ?>>
+								<small class="mt-0"> *Se "Não", deixar em branco.</small>
+							</div>
+						</div>
+
+
+						<div id="bloco4v" class="row">
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="imagem">Foto de Perfil<span> *Obrigatorio(Imagem quadrada)</span></label>
+								<input type="file" class="input-img d-none" name="imagem" id="imagem" onchange="displayImageInfo(1)" accept="image/*" required>
+								<label id="image-container1" class="image-container d-flex m-auto justify-content-center" for="imagem"></label>
+								<label class="label-input-image" id="label-image1" for="imagem">                    
+									<svg class="icon-produto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<path d="M17.5531248,16.4450044 C17.6286997,16.179405 17.9052761,16.0253597 18.1708755,16.1009346 C18.4364749,16.1765095 18.5905202,16.4530859 18.5149453,16.7186853 C18.2719275,17.5727439 17.5931039,18.2421122 16.71594,18.4614032 L8.58845447,20.4931921 C7.21457067,20.8106614 5.86688485,19.9801117 5.55483435,18.6278929 L3.45442103,9.52610182 C3.14793844,8.19801056 3.96175966,6.86917188 5.28405996,6.53859681 L7.17308561,6.06634039 C7.44098306,5.99936603 7.71245031,6.16224638 7.77942467,6.43014383 C7.84639904,6.69804129 7.68351869,6.96950853 7.41562123,7.03648289 L5.52659559,7.50873931 C4.7332154,7.70708435 4.24492267,8.50438756 4.42881223,9.30124232 L6.52922555,18.4030334 C6.71644059,19.2142985 7.52497921,19.7125835 8.35461578,19.5209579 L16.4734044,17.4912607 C17.0000615,17.3595964 17.407086,16.9582414 17.5531248,16.4450044 Z M20,13.2928932 L20,5.5 C20,4.67157288 19.3284271,4 18.5,4 L9.5,4 C8.67157288,4 8,4.67157288 8,5.5 L8,11.2928932 L10.1464466,9.14644661 C10.3417088,8.95118446 10.6582912,8.95118446 10.8535534,9.14644661 L14.5637089,12.8566022 L17.2226499,11.0839749 C17.4209612,10.9517673 17.6850212,10.9779144 17.8535534,11.1464466 L20,13.2928932 L20,13.2928932 Z M19.9874925,14.6945992 L17.4362911,12.1433978 L14.7773501,13.9160251 C14.5790388,14.0482327 14.3149788,14.0220856 14.1464466,13.8535534 L10.5,10.2071068 L8,12.7071068 L8,14.5 C8,15.3284271 8.67157288,16 9.5,16 L18.5,16 C19.2624802,16 19.8920849,15.4310925 19.9874925,14.6945992 L19.9874925,14.6945992 Z M9.5,3 L18.5,3 C19.8807119,3 21,4.11928813 21,5.5 L21,14.5 C21,15.8807119 19.8807119,17 18.5,17 L9.5,17 C8.11928813,17 7,15.8807119 7,14.5 L7,5.5 C7,4.11928813 8.11928813,3 9.5,3 Z M16,5 L18,5 C18.5522847,5 19,5.44771525 19,6 L19,8 C19,8.55228475 18.5522847,9 18,9 L16,9 C15.4477153,9 15,8.55228475 15,8 L15,6 C15,5.44771525 15.4477153,5 16,5 Z M16,6 L16,8 L18,8 L18,6 L16,6 Z"/>
+									</svg><p class="d-inline-block">Selecione imagem</p>
+								</label>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<label class="label-input" for="sobrenos">Sobre a Empresa</label>
+								<textarea class="textarea-form" name="sobrenos" id="sobrenos" required cols="30" rows="5"><?php if(isset($this->view->vendedor) && isset($this->view->vendedor['sobrenos'])) {?><?= $this->view->vendedor['sobrenos'] ?><?php } ?></textarea>
+							</div>
+						</div>
+
+
+            <div id="bloco6v" class="row w-100">
+							<div class="col-12">
+                  <h3 style="color: #777;">Horário de Funcionamento</h3>
+                  <table class="table table-bordered table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Dia</th>
+                        <th scope="col">Não Abre</th>
+                        <th scope="col">De:</th>
+                        <th scope="col">Até:</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th><p class="mt-3">Segunda</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="segunda-nao" id="segunda-nao" value="segunda-nao"></td>
+                        <td><input class="m-0" type="time" name="segunda-de" id="segunda-de" required></td>
+                        <td><input class="m-0" type="time" name="segunda-ate" id="segunda-ate" required></td>
+                      </tr>
+                      <tr>
+                        <th><p class="mt-3">Terça</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="terca-nao" id="terca-nao" value="terca-nao"></td>
+                        <td><input class="m-0" type="time" name="terca-de" id="terca-de" required></td>
+                        <td><input class="m-0" type="time" name="terca-ate" id="terca-ate" required></td>
+                      </tr>
+                      <tr>
+                        <th><p class="mt-3">Quarta</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="quarta-nao" id="quarta-nao" value="quarta-nao"></td>
+                        <td><input class="m-0" type="time" name="quarta-de" id="quarta-de" required></td>
+                        <td><input class="m-0" type="time" name="quarta-ate" id="quarta-ate" required></td>
+                      </tr>
+                      <tr>
+                        <th><p class="mt-3">Quinta</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="quinta-nao" id="quinta-nao" value="quinta-nao"></td>
+                        <td><input class="m-0" type="time" name="quinta-de" id="quinta-de" required></td>
+                        <td><input class="m-0" type="time" name="quinta-ate" id="quinta-ate" required></td>
+                      </tr>
+                      <tr>
+                        <th><p class="mt-3">Sexta</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="sexta-nao" id="sexta-nao" value="sexta-nao"></td>
+                        <td><input class="m-0" type="time" name="sexta-de" id="sexta-de" required></td>
+                        <td><input class="m-0" type="time" name="sexta-ate" id="sexta-ate" required></td>
+                      </tr>
+                      <tr>
+                        <th><p class="mt-3">Sábado</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="sabado-nao" id="sabado-nao" value="sabado-nao"></td>
+                        <td><input class="m-0" type="time" name="sabado-de" id="sabado-de" required></td>
+                        <td><input class="m-0" type="time" name="sabado-ate" id="sabado-ate" required></td>
+                      </tr>
+                      <tr>
+                        <th><p class="mt-3">Domingo</p></th>
+                        <td><input class="mb-0 mt-3" type="checkbox" name="domingo-nao" id="domingo-nao" value="domingo-nao" checked></td>
+                        <td><input class="m-0" type="time" name="domingo-de" id="domingo-de" disabled></td>
+                        <td><input class="m-0" type="time" name="domingo-ate" id="domingo-ate" disabled></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  								
+							</div>
+						</div>
+
+
+						<div id="bloco5v" class="d-flex col-12 justify-content-center p-0">
+							<div class="col-6 d-flex justify-content-start p-0">
+								<div id="voltarv" onclick="voltarvBloco()" class="btn">&#60; Voltar</div>
+							</div>
+							<div class="col-6 d-flex justify-content-end p-0">
+								<div id="avancarv" onclick="avancarvBloco()" class="btn">Avançar &#62;</div>
+							</div>
+							<input type="hidden" id="pagev" value="">
+						</div>
+
+
+					</div>
+
+          <div style="font-size: 15px; color: #999;" id="termosv">
+					  <input style="width: 20px;" type="checkbox" name="aceita-termos" value="sim" required>Aceito os <a href="/termos_e_condicoes" target="_blank">Termos e Condições de Uso</a>.
+          </div>
+					<button id="botaov" class="botao-form">Inscreva-se</button>
+					<p class="message">Já possui conta? <a href="/login">Faça o Login.</a></p>
+				</form>
+			</div>
+
+
+</div>
+
+
+<script>
+let inicial = document.getElementById('inicial');
+let usuario = document.getElementById('usuario');
+let vendedor = document.getElementById('vendedor');
+
+inicial.style.display = 'flex';
+usuario.style.display = 'none';
+vendedor.style.display = 'none';
+
+function usuarioBloco() {
+
+    inicial.style.display = 'none';
+    vendedor.style.display = 'none';
+    usuario.style.display = 'flex';
+
+    bloco1u.style.display = 'flex';
+    bloco2u.style.display = 'none';
+    bloco3u.style.display = 'none';
+    voltaru.style.display = 'none';
+    botaou.style.display = 'none';
+    pageu.value = 1;
+
+}
+
+function vendedorBloco() {
+
+    inicial.style.display = 'none';
+    usuario.style.display = 'none';
+    vendedor.style.display = 'flex';
+
+    bloco1v.style.display = 'flex';
+    bloco2v.style.display = 'none';
+    bloco3v.style.display = 'none';
+    bloco4v.style.display = 'none';
+    voltarv.style.display = 'none';
+    botaov.style.display = 'none';
+    pagev.value = 1;
+
+
+}
+
+//vendedor
+let bloco1v = document.getElementById('bloco1v');
+let bloco2v = document.getElementById('bloco2v');
+let bloco3v = document.getElementById('bloco3v');
+let bloco4v = document.getElementById('bloco4v');
+let bloco6v = document.getElementById('bloco6v');
+let bloco5v = document.getElementById('bloco5v');
+let pagev = document.getElementById('pagev');
+let voltarv = document.getElementById('voltarv');
+let avancarv = document.getElementById('avancarv');
+let botaov = document.getElementById('botaov');
+let termosv = document.getElementById('termosv');
+
+bloco1v.style.display = 'none';
+bloco2v.style.display = 'none';
+bloco3v.style.display = 'none';
+bloco4v.style.display = 'none';
+bloco6v.style.display = 'none';
+voltarv.style.display = 'none';
+botaov.style.display = 'none';
+termosv.style.display = 'none';
+
+function voltarvBloco() {
+
+    let pagina = pagev.value;
+
+    if(pagina == 2) {
+
+        bloco1v.style.display = 'flex';
+        bloco2v.style.display = 'none';
+        bloco3v.style.display = 'none';
+        bloco4v.style.display = 'none';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'none';
+        pagev.value = 1;
+
+    }
+
+    if(pagina == 3) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'flex';
+        bloco3v.style.display = 'none';
+        bloco4v.style.display = 'none';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'block';
+        avancarv.style.display = 'block';
+        botaov.style.display = 'none';
+        termosv.style.display = 'none';
+        pagev.value = 2;
+
+    }
+
+    if(pagina == 4) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'none';
+        bloco3v.style.display = 'flex';
+        bloco4v.style.display = 'none';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'block';
+        avancarv.style.display = 'block';
+        botaov.style.display = 'none';
+        termosv.style.display = 'none';
+        pagev.value = 3;
+
+    }
+
+    if(pagina == 5) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'none';
+        bloco3v.style.display = 'none';
+        bloco4v.style.display = 'flex';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'block';
+        avancarv.style.display = 'block';
+        botaov.style.display = 'none';
+        termosv.style.display = 'none';
+        pagev.value = 4;
+
+    }
+
+}
+
+function avancarvBloco() {
+
+    let pagina = pagev.value;
+
+    if(pagina == 1) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'flex';
+        bloco3v.style.display = 'none';
+        bloco4v.style.display = 'none';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'block';
+        pagev.value = 2;
+
+    }
+
+    if(pagina == 2) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'none';
+        bloco3v.style.display = 'flex';
+        bloco4v.style.display = 'none';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'block';
+        avancarv.style.display = 'block';
+        botaov.style.display = 'none';
+        termosv.style.display = 'none';
+        pagev.value = 3;
+
+    }
+
+    if(pagina == 3) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'none';
+        bloco3v.style.display = 'none';
+        bloco4v.style.display = 'flex';
+        bloco6v.style.display = 'none';
+        voltarv.style.display = 'block';
+        avancarv.style.display = 'block';
+        botaov.style.display = 'none';
+        termosv.style.display = 'none';
+        pagev.value = 4;
+
+    }
+
+    if(pagina == 4) {
+
+        bloco1v.style.display = 'none';
+        bloco2v.style.display = 'none';
+        bloco3v.style.display = 'none';
+        bloco4v.style.display = 'none';
+        bloco6v.style.display = 'flex';
+        voltarv.style.display = 'block';
+        avancarv.style.display = 'none';
+        botaov.style.display = 'block';
+        termosv.style.display = 'block';
+        pagev.value = 5;
+
+    }
+    
+}
+
+function displayImageInfo(numImg) {
+const fileInput = document.getElementById('imagem');
+const imageContainer = document.getElementById('image-container' + numImg);
+const imageSelectedMessage = document.getElementById('image-selected-message' + numImg);
+const imageLabel = document.getElementById('label-image' + numImg);
+
+if (fileInput.files && fileInput.files[0]) {
+const file = fileInput.files[0];
+const reader = new FileReader();
+
+reader.onload = function (e) {
+    const img = new Image();
+    img.src = e.target.result;
+    img.id = 'img' + numImg;
+
+    img.onload = function () {
+        const width = img.width;
+        const height = img.height;
+
+        if (width / height < 0.97 || width / height > 1.03) {
+            imageContainer.innerHTML = ''; // Limpa a imagem
+            imageLabel.innerHTML = 'Formato inválido! Clique aqui e selecione outra.'; // Exibe mensagem de formato inválido
+            imageContainer.style.display = 'none';
+            imageLabel.style.display = 'block';
+            imageLabel.style.color = '#f34d4d';
+        } else {
+            imageContainer.innerHTML = ''; // Limpa a imagem
+            imageLabel.textContent = '';
+            imageContainer.appendChild(img);
+            imageSelectedMessage.textContent = ''; // Limpa a mensagem de formato inválido
+            imageContainer.style.display = 'block';
+            imageLabel.style.display = 'none';
+        }
+    };
+};
+
+reader.readAsDataURL(file);
+} else {
+imageContainer.style.display = 'none';
+imageLabel.style.display = 'block';
+const remover = document.getElementById('img' + numImg);
+remover.style.display = 'none';
+}
+}
+
+function alternarTipoSenhaV() {
+    var senhav = document.getElementById("senhav");
+    var senha1v = document.getElementById("senha1v");
+    var senha2v = document.getElementById("senha2v");
+    var tipoAtualv = senhav.type;
+
+    // Alterna para o tipo de entrada oposto
+    if (tipoAtualv === "password") {
+      senhav.type = "text";
+      senha1v.style.display = 'none';
+      senha2v.style.display = 'block';
+    } else {
+      senhav.type = "password";
+      senha1v.style.display = 'block';
+      senha2v.style.display = 'none';
+    }
+  }
+  function alternarTipoSenha2V() {
+    var senhav = document.getElementById("validasenhav");
+    var senha3v = document.getElementById("senha3v");
+    var senha4v = document.getElementById("senha4v");
+    var tipoAtualv = senhav.type;
+
+    // Alterna para o tipo de entrada oposto
+    if (tipoAtualv === "password") {
+      senhav.type = "text";
+      senha3v.style.display = 'none';
+      senha4v.style.display = 'block';
+    } else {
+      senhav.type = "password";
+      senha3v.style.display = 'block';
+      senha4v.style.display = 'none';
+    }
+}
+
+  //Validar senha
+
+  var senhav = document.getElementById('senhav');
+  var confsenhav = senhav.value;
+  if(confsenhav == '') {
+    var validasenhav = document.getElementById("validasenhav");
+    var confvalidasenhav = validasenhav.value;
+    var smallsenhav = document.getElementById("conferesenhav");
+    var textRegexv = document.getElementById('conferesenharegexv');
+
+    textRegexv.style.display = "none";
+    smallsenhav.style.display = "none";
+    validasenhav.style.borderColor = " #e0e0e0";
+  }
+
+  function validaSenhaRegexV() {
+
+    var validaRegexv;
+
+    var padraov = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#/])[A-Za-z\d@$!%*?&#/]{8,20}$/;
+
+    var senhav = document.getElementById('senhav');
+    var confsenhav = senhav.value;
+  
+    if (padraov.test(confsenhav)) {
+
+      validaRegexv = true; // A senha é válida
+
+    } else {
+
+      validaRegexv = false; // A senha é inválida
+
+    }
+
+    var textRegexv = document.getElementById('conferesenharegexv');
+
+    if (validaRegexv) {
+
+      textRegexv.style.display = "none";
+      senhav.style.borderColor = " #e0e0e0";
+
+    } else {
+
+      textRegexv.style.display = "block";
+      senhav.style.borderColor = " #dc3545";
+
+    }
+
+  }
+
+  function limpaSmalV() {
+
+    var senhav = document.getElementById('senhav');
+    var confsenhav = senhav.value;
+
+    if(confsenhav == '') {
+
+      var textRegexv = document.getElementById('conferesenharegexv');
+
+      textRegexv.style.display = "none";
+      senhav.style.borderColor = " #e0e0e0";
+
+    }
+
+  }
+
+  function verificaV() {
+
+    validaSenhaV();
+
+  }
+  function validaSenhaV() {//verifica se são igauis
+    var senhav = document.getElementById('senhav');
+    var confsenhav = senhav.value;
+    var validasenhav = document.getElementById("validasenhav");
+    var confvalidasenhav = validasenhav.value;
+    
+
+    var smallsenhav = document.getElementById("conferesenhav");
+
+    if(confsenhav == confvalidasenhav) {
+        smallsenhav.style.display = "none";
+        validasenhav.style.borderColor = " #e0e0e0";
+    } else {
+        smallsenhav.style.display = "block";
+        validasenhav.style.borderColor = "#dc3545";
+    }
+
+  }
+
+  //validador de documento
+  var documentov = document.getElementById('documentov');
+  var confdocv = documentov.value;
+  if(confdocv == '') {
+    var textodocumentov = document.getElementById("conferedocumentov");
+    textodocumentov.style.display = "none";
+    documentov.style.borderColor = " #e0e0e0";
+  }
+
+  function limpaDocV() {
+
+    var documentov = document.getElementById('documentov');
+    var confdocv = documentov.value;
+    if(confdocv == '') {
+      var textodocumentov = document.getElementById("conferedocumentov");
+      textodocumentov.style.display = "none";
+      documentov.style.borderColor = " #e0e0e0";
+    }
+
+  }
+
+  function validarCPFCNPJV() {
+    var documentov = document.getElementById('documentov');
+    var confdocumentov = documentov.value;
+    var numerov = confdocumentov.replace(/\D/g, '');
+    
+    if (numerov.length === 11) {
+        if (/^(\d)\1*$/.test(numerov)) {
+            return false;
+        }
+        
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(numerov[i]) * (10 - i);
+        }
+        
+        const digito1 = (soma % 11 < 2) ? 0 : 11 - (soma % 11);
+        
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(numerov[i]) * (11 - i);
+        }
+        
+        const digito2 = (soma % 11 < 2) ? 0 : 11 - (soma % 11);
+        
+        if (numerov[9] == digito1 && numerov[10] == digito2) {
+            return true;
+        }
+    } else if (numerov.length === 14) {
+        if (/^(\d)\1*$/.test(numerov)) {
+            return false;
+        }
+        
+        let soma = 0;
+        let multiplicador = 5;
+        for (let i = 0; i < 12; i++) {
+            soma += parseInt(numerov[i]) * multiplicador;
+            multiplicador = (multiplicador === 2) ? 9 : multiplicador - 1;
+        }
+        
+        const digito1 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+        
+        soma = 0;
+        multiplicador = 6;
+        for (let i = 0; i < 13; i++) {
+            soma += parseInt(numerov[i]) * multiplicador;
+            multiplicador = (multiplicador === 2) ? 9 : multiplicador - 1;
+        }
+        
+        const digito2 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+        
+        if (numerov[12] == digito1 && numerov[13] == digito2) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+function validadedocV() {
+  var styledocumentov = document.getElementById('documentov');
+  var textodocumentov = document.getElementById('conferedocumentov');
+
+  if(validarCPFCNPJV()) {
+    textodocumentov.style.display = "none";
+    styledocumentov.style.borderColor = " #e0e0e0";
+  } else {
+    textodocumentov.style.display = "block";
+    styledocumentov.style.borderColor = " #dc3545";
+  }
+
+}
+
+  //Desabilitar horario de funcionamento vendedor
+  const checkbox1 = document.getElementById("segunda-nao");
+  const de1 = document.getElementById("segunda-de");
+  const ate1 = document.getElementById("segunda-ate");
+  
+  checkbox1.addEventListener("change", function() {
+
+    if (checkbox1.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de1.disabled = checkbox1.checked;
+        ate1.disabled = checkbox1.checked;
+        de1.removeAttribute("required");
+        ate1.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de1.disabled = checkbox1.checked;
+        ate1.disabled = checkbox1.checked;
+        de1.setAttribute("required", true);
+        ate1.setAttribute("required", true);
+    }
+      
+  });
+  const checkbox2 = document.getElementById("terca-nao");
+  const de2 = document.getElementById("terca-de");
+  const ate2 = document.getElementById("terca-ate");
+  
+  checkbox2.addEventListener("change", function() {
+ 
+    if (checkbox2.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de2.disabled = checkbox2.checked;
+        ate2.disabled = checkbox2.checked;
+        de2.removeAttribute("required");
+        ate2.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de2.disabled = checkbox2.checked;
+        ate2.disabled = checkbox2.checked;
+        de2.setAttribute("required", true);
+        ate2.setAttribute("required", true);
+    }
+    
+  });
+  const checkbox3 = document.getElementById("quarta-nao");
+  const de3 = document.getElementById("quarta-de");
+  const ate3 = document.getElementById("quarta-ate");
+  
+  checkbox3.addEventListener("change", function() {
+
+    if (checkbox3.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de3.disabled = checkbox3.checked;
+        ate3.disabled = checkbox3.checked;
+        de3.removeAttribute("required");
+        ate3.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de3.disabled = checkbox3.checked;
+        ate3.disabled = checkbox3.checked;
+        de3.setAttribute("required", true);
+        ate3.setAttribute("required", true);
+    }
+
+  });
+  const checkbox4 = document.getElementById("quinta-nao");
+  const de4 = document.getElementById("quinta-de");
+  const ate4 = document.getElementById("quinta-ate");
+  
+  checkbox4.addEventListener("change", function() {
+    
+    if (checkbox4.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de4.disabled = checkbox4.checked;
+        ate4.disabled = checkbox4.checked;
+        de4.removeAttribute("required");
+        ate4.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de4.disabled = checkbox4.checked;
+        ate4.disabled = checkbox4.checked;
+        de4.setAttribute("required", true);
+        ate4.setAttribute("required", true);
+    }
+
+  });
+  const checkbox5 = document.getElementById("sexta-nao");
+  const de5 = document.getElementById("sexta-de");
+  const ate5 = document.getElementById("sexta-ate");
+  
+  checkbox5.addEventListener("change", function() {
+    
+    if (checkbox5.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de5.disabled = checkbox5.checked;
+        ate5.disabled = checkbox5.checked;
+        de5.removeAttribute("required");
+        ate5.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de5.disabled = checkbox5.checked;
+        ate5.disabled = checkbox5.checked;
+        de5.setAttribute("required", true);
+        ate5.setAttribute("required", true);
+    }
+
+  });
+  const checkbox6 = document.getElementById("sabado-nao");
+  const de6 = document.getElementById("sabado-de");
+  const ate6 = document.getElementById("sabado-ate");
+  
+  checkbox6.addEventListener("change", function() {
+    
+    if (checkbox6.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de6.disabled = checkbox6.checked;
+        ate6.disabled = checkbox6.checked;
+        de6.removeAttribute("required");
+        ate6.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de6.disabled = checkbox6.checked;
+        ate6.disabled = checkbox6.checked;
+        de6.setAttribute("required", true);
+        ate6.setAttribute("required", true);
+    }
+      
+  });
+  const checkbox7 = document.getElementById("domingo-nao");
+  const de7 = document.getElementById("domingo-de");
+  const ate7 = document.getElementById("domingo-ate");
+  
+  checkbox7.addEventListener("change", function() {
+    
+    if (checkbox7.checked) {
+        // Se o checkbox estiver marcado, desabilite o campo de entrada e remova o atributo "required"
+        de7.disabled = checkbox7.checked;
+        ate7.disabled = checkbox7.checked;
+        de7.removeAttribute("required");
+        ate7.removeAttribute("required");
+    } else {
+        // Se o checkbox estiver desmarcado, habilite o campo de entrada e adicione o atributo "required"
+        de7.disabled = checkbox7.checked;
+        ate7.disabled = checkbox7.checked;
+        de7.setAttribute("required", true);
+        ate7.setAttribute("required", true);
+    }
+
+  });
+
+  //Desabilitar horario de funcionamento vendedor
+
+
+
+
+
+
+//usuario
+let bloco1u = document.getElementById('bloco1u');
+let bloco2u = document.getElementById('bloco2u');
+let bloco3u = document.getElementById('bloco3u');
+let bloco5u = document.getElementById('bloco5u');
+let pageu = document.getElementById('pageu');
+let voltaru = document.getElementById('voltaru');
+let avancaru = document.getElementById('avancaru');
+let botaou = document.getElementById('botaou');
+let termosu = document.getElementById('termosu');
+
+bloco1u.style.display = 'none';
+bloco2u.style.display = 'none';
+bloco3u.style.display = 'none';
+voltaru.style.display = 'none';
+botaou.style.display = 'none';
+termosu.style.display = 'none';
+
+function voltaruBloco() {
+
+    let pagina = pageu.value;
+
+    if(pagina == 2) {
+
+        bloco1u.style.display = 'flex';
+        bloco2u.style.display = 'none';
+        bloco3u.style.display = 'none';
+        voltaru.style.display = 'none';
+        avancaru.style.display = 'block';
+        pageu.value = 1;
+
+    }
+
+    if(pagina == 3) {
+
+        bloco1u.style.display = 'none';
+        bloco2u.style.display = 'flex';
+        bloco3u.style.display = 'none';
+        voltaru.style.display = 'block';
+        avancaru.style.display = 'block';
+        botaou.style.display = 'none';
+        termosu.style.display = 'none';
+        pageu.value = 2;
+
+    }
+
+}
+
+function avancaruBloco() {
+
+    let pagina = pageu.value;
+
+    if(pagina == 1) {
+
+        bloco1u.style.display = 'none';
+        bloco2u.style.display = 'flex';
+        bloco3u.style.display = 'none';
+        voltaru.style.display = 'block';
+        pageu.value = 2;
+
+    }
+
+    if(pagina == 2) {
+
+        bloco1u.style.display = 'none';
+        bloco2u.style.display = 'none';
+        bloco3u.style.display = 'flex';
+        voltaru.style.display = 'block';
+        avancaru.style.display = 'none';
+        botaou.style.display = 'block';
+        termosu.style.display = 'block';
+        pageu.value = 3;
+
+    }
+    
+}
+
+function alternarTipoSenhaU() {
+    var senhau = document.getElementById("senhau");
+    var senha1u = document.getElementById("senha1u");
+    var senha2u = document.getElementById("senha2u");
+    var tipoAtualu = senhau.type;
+
+    // Alterna para o tipo de entrada oposto
+    if (tipoAtualu === "password") {
+      senhau.type = "text";
+      senha1u.style.display = 'none';
+      senha2u.style.display = 'block';
+    } else {
+      senhau.type = "password";
+      senha1u.style.display = 'block';
+      senha2u.style.display = 'none';
+    }
+}
+  function alternarTipoSenha2U() {
+    var senhau = document.getElementById("validasenhau");
+    var senha3u = document.getElementById("senha3u");
+    var senha4u = document.getElementById("senha4u");
+    var tipoAtualu = senhau.type;
+
+    // Alterna para o tipo de entrada oposto
+    if (tipoAtualu === "password") {
+      senhau.type = "text";
+      senha3u.style.display = 'none';
+      senha4u.style.display = 'block';
+    } else {
+      senhau.type = "password";
+      senha3u.style.display = 'block';
+      senha4u.style.display = 'none';
+    }
+  }
+
+  //Validar senha
+
+  var senhau = document.getElementById('senhau');
+  var confsenhau = senhau.value;
+  if(confsenhau == '') {
+    var validasenhau = document.getElementById("validasenhau");
+    var confvalidasenhau = validasenhau.value;
+    var smallsenhau = document.getElementById("conferesenhau");
+    var textRegexu = document.getElementById('conferesenharegexu');
+
+    textRegexu.style.display = "none";
+    smallsenhau.style.display = "none";
+    validasenhau.style.borderColor = " #e0e0e0";
+  }
+
+  function validaSenhaRegexU() {
+
+    var validaRegexu;
+
+    var padraou = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#/])[A-Za-z\d@$!%*?&#/]{8,20}$/;
+
+    var senhau = document.getElementById('senhau');
+    var confsenhau = senhau.value;
+  
+    if (padraou.test(confsenhau)) {
+
+      validaRegexu = true; // A senha é válida
+
+    } else {
+
+      validaRegexu = false; // A senha é inválida
+
+    }
+
+    var textRegexu = document.getElementById('conferesenharegexu');
+
+    if (validaRegexu) {
+
+      textRegexu.style.display = "none";
+      senhau.style.borderColor = " #e0e0e0";
+
+    } else {
+
+      textRegexu.style.display = "block";
+      senhau.style.borderColor = " #dc3545";
+
+    }
+
+  }
+
+  function limpaSmalU() {
+
+    var senhau = document.getElementById('senhau');
+    var confsenhau = senhau.value;
+
+    if(confsenhau == '') {
+
+      var textRegexu = document.getElementById('conferesenharegexu');
+
+      textRegexu.style.display = "none";
+      senhau.style.borderColor = " #e0e0e0";
+
+    }
+
+  }
+
+  function verificaU() {
+
+    validaSenhaU();
+
+  }
+  function validaSenhaU() {//verifica se são igauis
+    var senhau = document.getElementById('senhau');
+    var confsenhau = senhau.value;
+    var validasenhau = document.getElementById("validasenhau");
+    var confvalidasenhau = validasenhau.value;
+    
+
+    var smallsenhau = document.getElementById("conferesenhau");
+
+    if(confsenhau == confvalidasenhau) {
+        smallsenhau.style.display = "none";
+        validasenhau.style.borderColor = " #e0e0e0";
+    } else {
+        smallsenhau.style.display = "block";
+        validasenhau.style.borderColor = "#dc3545";
+    }
+
+  }
+
+  //validador de documento
+  var documentou = document.getElementById('documentou');
+  var confdocu = documentou.value;
+  if(confdocu == '') {
+    var textodocumentou = document.getElementById("conferedocumentou");
+    textodocumentou.style.display = "none";
+    documentou.style.borderColor = " #e0e0e0";
+  }
+
+  function limpaDocU() {
+
+    var documentou = document.getElementById('documentou');
+    var confdocu = documentou.value;
+    if(confdocu == '') {
+      var textodocumentou = document.getElementById("conferedocumentou");
+      textodocumentou.style.display = "none";
+      documentou.style.borderColor = " #e0e0e0";
+    }
+
+  }
+
+  function validarCPFCNPJU() {
+    var documentou = document.getElementById('documentou');
+    var confdocumentou = documentou.value;
+    var numerou = confdocumentou.replace(/\D/g, '');
+    
+    if (numerou.length === 11) {
+        if (/^(\d)\1*$/.test(numerou)) {
+            return false;
+        }
+        
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(numerou[i]) * (10 - i);
+        }
+        
+        const digito1 = (soma % 11 < 2) ? 0 : 11 - (soma % 11);
+        
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(numerou[i]) * (11 - i);
+        }
+        
+        const digito2 = (soma % 11 < 2) ? 0 : 11 - (soma % 11);
+        
+        if (numerou[9] == digito1 && numerou[10] == digito2) {
+            return true;
+        }
+    } else if (numerou.length === 14) {
+        if (/^(\d)\1*$/.test(numerou)) {
+            return false;
+        }
+        
+        let soma = 0;
+        let multiplicador = 5;
+        for (let i = 0; i < 12; i++) {
+            soma += parseInt(numerou[i]) * multiplicador;
+            multiplicador = (multiplicador === 2) ? 9 : multiplicador - 1;
+        }
+        
+        const digito1 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+        
+        soma = 0;
+        multiplicador = 6;
+        for (let i = 0; i < 13; i++) {
+            soma += parseInt(numerou[i]) * multiplicador;
+            multiplicador = (multiplicador === 2) ? 9 : multiplicador - 1;
+        }
+        
+        const digito2 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+        
+        if (numerou[12] == digito1 && numerou[13] == digito2) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+function validadedocU() {
+  var styledocumentou = document.getElementById('documentou');
+  var textodocumentou = document.getElementById('conferedocumentou');
+
+  if(validarCPFCNPJU()) {
+    textodocumentou.style.display = "none";
+    styledocumentou.style.borderColor = " #e0e0e0";
+  } else {
+    textodocumentou.style.display = "block";
+    styledocumentou.style.borderColor = " #dc3545";
+  }
+
+}
+
+</script>

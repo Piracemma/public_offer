@@ -1,0 +1,33 @@
+<div class="form-bg-color">
+    <div class="login-page">
+        <form class="login-form" id="form" action="/recuperar_senha" method="post">
+            <div class="form-title">
+                <h2 class="mb-1">Esqueci minha Senha:</h2>
+                <?php if(isset($_GET['act']) && $_GET['act'] == 'nao_encontrado') { ?>
+                <small class="text-danger">*E-mail não encontrado!</small>
+                <?php } ?>
+                <?php if(isset($_GET['act']) && $_GET['act'] == 'erro_enviar_email') {?>
+                <small class="text-danger">*Erro ao enviar e-mail, aguarde alguns instante e repita o processo.</small>
+                <?php } ?>
+            </div>
+
+            <label class="label-input" for="email">E-mail</label>
+            <input class="input-tag" type="email" name="email" id="email" placeholder="E-mail cadastrado" required>
+
+            <button id="botao" class="botao-form">Enviar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function botaoClicado() {
+    
+        var caixaLoader = document.getElementById('caixa-loader');
+        caixaLoader.style.display = 'flex';
+        
+    }
+
+    var botao = document.getElementById("botao");
+    botao.addEventListener("click", botaoClicado);
+
+</script>

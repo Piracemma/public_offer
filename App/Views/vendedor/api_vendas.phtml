@@ -1,0 +1,345 @@
+<?php if(isset($this->view->vendas) && !empty($this->view->vendas)) {?>
+<section class="pt-0">
+    <div class="container">
+        <div class="row">
+
+            <?php foreach($this->view->vendas as $key => $venda) {
+                $status = $venda['resumo']['status'];
+                $status_nome = '';
+                if($status == 1) {
+                    $status_nome = 'aprovado';
+                } 
+                if($status == 2) {
+                    $status_nome = 'pendente';
+                }
+                if($status == 0) {
+                    $status_nome = 'cancelado';
+                }
+                $nome = '';
+                $explode_nome = explode(' ', $venda['resumo']['comprador']);
+                if(!empty($explode_nome[0])) {
+                    $nome = $explode_nome[0];
+                } else {
+                    $nome = $explode_nome[1];
+                }
+            ?>
+
+                <div class="col-md-12 col-sm-12">
+                                    <?php if($status == 3) { 
+                                        $motivo_cancelamento = explode(' - ', $venda['resumo']['motivo_cancelamento']); 
+                                    ?>
+
+                                        <div class="faq-content">
+                                            <div class="faq-accordion accord-faq<?= $key ?>" style="border: 2px solid #dc3545;">
+                                            <button class="accordion accord<?= $key ?>"><p class="d-inline-block m-0 text-danger">DEVOLUÇÃO</p> - <?= $nome ?> -  <?= $venda['resumo']['data_venda'] ?></button>
+                                                <div class="panel fadeinleft w-100">
+
+                                                    <?php if($status == 3) {?>
+                                                <div class="container-fluid bg-danger p-2 text-white mt-2">
+
+                                                    <div style="border: 1px dotted #fff;" class="p-2">
+                                                    
+                                                <h5 class="mb-0">O comprador solicitou a devolução dos produtos!</h5>
+                                                <p class="text-white p-1"><b>Motivo: </b><?= $motivo_cancelamento[0] ?></p>
+                                                <?php if(isset($motivo_cancelamento[1]) && !empty($motivo_cancelamento[1])) {?>
+                                                    <p class="text-white p-1"><b>Comentario do cliente: </b><?= $motivo_cancelamento[1] ?></p>
+                                                <?php } ?>
+                                                <p class="text-white p-1">Entre em contato para organizar os detalhes da devolução.</b></p>
+                                                <p class="text-white p-1">Nome: <b><?= $venda['resumo']['comprador'] ?></b></p>
+                                                <p class="text-white p-1">Endereço: <b><?= $venda['resumo']['endereco'] ?></b></p>
+                                                <p class="text-white p-1">Telefone: <b><?= $venda['resumo']['telefone'] ?></b></p>
+
+                                                <div class="table-responsive">
+                                                    <table class="table" style="border-top: none;">
+                                                        <thead>
+                                                        <tr class="text-white">
+                                                            <th style="border-top: none;" class="p-1" scope="col-4">Produto</th>
+                                                            <th style="border-top: none;" class="p-1" scope="col-3">Valor</th>
+                                                            <th style="border-top: none;" class="p-1 text-center" scope="col-2">Qtd</th>
+                                                            <th style="border-top: none;" class="p-1" scope="col-3">Total</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        <?php foreach($venda['itens'] as $produto) {?>
+
+                                                            <tr>
+                                                            <td class="py-1 text-white"><?= $produto['nome_produto'] ?></td>
+                                                            <td class="py-1 text-white">R$<?= number_format($produto['preco'], 2, ',', '') ?></td>
+                                                            <td class="py-1 text-white text-center"><?= $produto['quantidade'] ?></td>
+                                                            <td class="py-1 text-white">R$<?= number_format($produto['total'], 2, ',', '') ?></td>
+                                                            </tr>
+
+                                                        <?php } ?>                          
+
+
+                                                        <?php if($venda['resumo']['cupom']) {?>
+
+                                                            <tr style="border-top: 1px solid #FFF;">
+                                                            <td class="text-start text-white p-1" colspan="4"><b>
+                                                                Cupom:&nbsp;
+                                                                - R$<?= number_format($venda['resumo']['valor_desconto'], 2, ',', '') ?>
+
+                                                            </b></td>
+                                                            </tr>
+
+                                                        <?php } ?>
+
+                                                        <tr style="border-top: 1px solid #FFF;" class="pb-0">
+                                                            <td class="text-start text-white p-1" colspan="4"><b>
+                                                            Frete:&nbsp;
+                                                            + R$<?= number_format($venda['resumo']['valor_entrega'], 2, ',', '') ?>
+
+                                                            </b></td>
+                                                        </tr>
+
+                                                        <tr style="border-top: 1px solid #FFF;" class="pb-0">
+                                                            <td class="text-start text-white p-1" colspan="4"><b>
+                                                            Total:&nbsp;
+                                                            R$<?= number_format($venda['resumo']['total_compra'], 2, ',', '') ?>
+
+                                                            </b></td>
+                                                        </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php } else { ?>
+                        <div class="faq-content">
+                                <div class="faq-accordion <?php if($status == 2) {?> pendente-border <?php } ?> accord-faq<?= $key ?>">
+                                    <?php if($status == 2 && $venda['resumo']['aberto'] == true && $venda['resumo']['proximo_fim'] == false) {?>
+                                        <div class="mb-3 text-sm-left text-center" id="div-pendente<?= $venda['resumo']['id_venda'] ?>">
+                                            <a id="aceitar<?= $venda['resumo']['id_venda'] ?>" href="/aprovar_venda?venda=<?= $venda['resumo']['id_venda'] ?>" class="botao-geral bg-success mr-4">Aceitar</a>
+                                            <a id="recusar<?= $venda['resumo']['id_venda'] ?>" onclick="cancelarVenda(<?= $venda['resumo']['id_venda'] ?>)" class="botao-geral bg-danger">Recusar</a>
+                                        </div>
+                                    <?php } ?>
+                                    <button class="accordion accord<?= $key ?>"><b class="<?= $status_nome ?> text-uppercase"><?= $status_nome ?></b> - <?= $nome ?> - <?= $venda['resumo']['data_venda'] ?></button>
+                                    <div class="panel fadeinleft">
+                                        <hr>
+                                    <div class="container">
+
+                                        <?php foreach($venda['itens'] as $key2 => $item) {
+                                            $forma_pagamento = array(
+                                                'dinheiro' => 'Dinheiro',
+                                                'debito' => 'Cartão de Debito',
+                                                'credito' => 'Cartão de Credito'
+                                            );    
+                                        ?>
+
+                                            <div class="row">
+                                                <div class="col-sm-3 col-12 d-flex align-items-center justify-content-center">
+                                                    <a class="popup-gallery w-50" href="<?= HOST_APLIC ?><?= $item['imagem'] ?>">
+                                                    <img class="example-image w-100" src="<?= HOST_APLIC ?><?= $item['imagem'] ?>"
+                                                    alt="portfolio img">
+                                                    </a>
+                                                </div>
+                                                <div class="col-sm-9 col-12 text-left">
+                                                    <p class="p-0"><b>Produto: </b><?= $item['nome_produto'] ?></p>
+                                                    <?php if(!empty($item['observacao_item'])) {?>
+                                                        <p class="p-0 text-danger"><b>Observação: </b><?= $item['observacao_item'] ?></p>
+                                                    <?php } ?>
+                                                    <p class="p-0"><b>Preço: </b>R$<?php 
+                                                
+                                                        $precoitem = $item['preco'];
+                                                        $precoitemFormatado = number_format($precoitem, 2, ',', '');
+
+                                                        echo $precoitemFormatado;
+
+                                                        ?>
+                                                    </p>
+                                                    <p class="p-0"><b>Quantidade: </b><?= $item['quantidade'] ?></p>
+                                                    <p class="p-0"><b>Total: </b>R$<?php 
+                                                
+                                                        $precoitem = $item['total'];
+                                                        $precoitemFormatado = number_format($precoitem, 2, ',', '');
+
+                                                        echo $precoitemFormatado;
+
+                                                        ?>
+                                                    </p>
+                                                </div>                                 
+                                            </div>
+                                            <hr>
+
+                                        <?php } ?>
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="">
+                                                    <p class="p-1 mb-1"><b>Informações:</b></p>
+                                                </div>
+                                                <p class="p-0"><b>Nome: </b><?= $venda['resumo']['comprador'] ?></p>
+                                                <p class="p-0"><b>Telefone: </b><?= $venda['resumo']['telefone'] ?></p>
+                                                <p class="p-0"><b>Endereço: </b><?= $venda['resumo']['endereco'] ?></p>
+                                                <hr>
+                                                <?php if(isset($venda['resumo']['observacao_compra']) && !empty($venda['resumo']['observacao_compra'])) {?>
+                                                    <p class="p-0 text-danger"><b>Observação: </b><?= $venda['resumo']['observacao_compra'] ?></p>
+                                                <?php } ?>
+                                                <p class="p-0"><b>Forma de Pagamento: </b><?= $forma_pagamento[$venda['resumo']['finalizadora']] ?></p>                                            
+                                                <p class="p-0"><b>Produtos: </b>R$<?php 
+                                            
+                                                    $precoitem = $venda['resumo']['total_produtos'];
+                                                    $precoitemFormatado = number_format($precoitem, 2, ',', '');
+
+                                                    echo $precoitemFormatado;
+
+                                                    ?>
+                                                </p>
+
+                                                <?php if($venda['resumo']['cupom']) {?>
+                                                    <p class="p-0"><b>Cupom: </b><?= $venda['resumo']['nome_cupom'] ?> - <?= $venda['resumo']['desconto'] * 100 ?>% - R$<?php 
+                                                        $valor_desconto = $venda['resumo']['valor_desconto'];
+                                                        $valor_descontoFormatado = number_format($valor_desconto, 2, ',', '');
+
+                                                        echo $valor_descontoFormatado;
+                                                    ?>
+                                                    </p>
+                                                <?php } ?>
+
+                                                <p class="p-0"><b>Frete: </b>R$<?php 
+                                            
+                                                    $precoitem = $venda['resumo']['valor_entrega'];
+                                                    $precoitemFormatado = number_format($precoitem, 2, ',', '');
+
+                                                    echo $precoitemFormatado;
+
+                                                    ?>
+                                                </p>
+                                                <h5 class="mt-1" style="color: #868686;"><b>Total da Compra: </b>R$<?php 
+                                            
+                                                    $precoitem = $venda['resumo']['total_compra'];
+                                                    $precoitemFormatado = number_format($precoitem, 2, ',', '');
+
+                                                    echo $precoitemFormatado;
+
+                                                    ?>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>
+                    <?php } ?>
+
+                </div>
+
+            <?php } ?>
+        
+        </div>
+    </div>
+</section>
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+	var i;
+
+	for (i = 0; i < acc.length; i++) {
+		acc[i].addEventListener("click", function () {
+			this.classList.toggle("active");
+			var panel = this.nextElementSibling;
+			if (panel.style.maxHeight) {
+				panel.style.maxHeight = null;
+			} else {
+				panel.style.maxHeight = panel.scrollHeight + "px";
+			}
+		});
+	}
+
+    $('.popup-gallery').magnificPopup({
+		type: 'image',
+		mainClass: 'mfp-with-zoom',
+		gallery: {
+			enabled: false,
+		},
+		zoom: {
+			enabled: true,
+			duration: 300,
+			easing: 'ease-in-out',
+			opener: function (openerElement) {
+				return openerElement.is('img') ? openerElement : openerElement.find('img');
+			}
+		}
+	});
+
+    function cancelarVenda(id) {
+
+        var aceitar = document.getElementById('aceitar'+id);
+        var recusar = document.getElementById('recusar'+id);
+        var divPai = document.getElementById('div-pendente'+id);
+
+        aceitar.style.display = 'none';
+        recusar.style.display = 'none';
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/recusar_venda?venda='+id;
+        form.id = 'form-pendente'+id;
+        form.className = 'form-group';
+        form.style.width = '95%';
+        form.style.display = 'inline-block';
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'motivo_cancelamento';
+        input.className = 'form-control';
+        input.style.width = '80%';
+        input.style.display = 'inline-block';
+        input.placeholder = 'Motivo do Cancelamento';
+        input.required = true;
+
+        var button = document.createElement('button');
+        button.type = 'submit';
+        button.className = 'botao-geral bg-danger';
+        button.innerHTML = 'Recusar'
+        button.style.display = 'inline-block';
+        button.style.marginLeft = '5px';
+
+        var voltar = document.createElement('span');
+        voltar.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" onclick="voltarPendente(`+id+`)" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`;
+        voltar.style.display = 'inline-block';
+        voltar.style.marginRight = '10px';
+        voltar.style.cursor = 'pointer';
+        voltar.id = 'voltar-pendente'+id;
+
+        form.appendChild(input);
+        form.appendChild(button);        
+        divPai.appendChild(voltar);
+        divPai.appendChild(form);
+
+    }
+
+    function voltarPendente(id) {
+
+        var aceitar = document.getElementById('aceitar'+id);
+        var recusar = document.getElementById('recusar'+id);
+        var form = document.getElementById('form-pendente'+id);
+        var voltar = document.getElementById('voltar-pendente'+id);
+        if (form.parentNode) {
+        form.parentNode.removeChild(form);
+        }
+        if (voltar.parentNode) {
+        voltar.parentNode.removeChild(voltar);
+        }
+
+        aceitar.style.display = 'inline-block';
+        recusar.style.display = 'inline-block';
+        
+
+    }
+</script>
+
+<?php } ?>
+
+<?php if(empty($this->view->vendas)) { ?>
+    <h3 style="color: #868686;" class="text-center mt-5">Nenhuma venda por enquanto.</h3>
+<?php } ?>
