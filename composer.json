@@ -1,0 +1,19 @@
+{
+	"name": "offer/offer",
+	"require": {
+		"php": ">= 7.0",
+		"phpmailer/phpmailer": "^6.8"
+	},
+	"authors": [
+		{
+			"name": "Matheus Rodrigues Silveira de Freitas",
+			"email": "matheus@offerbr.com.br"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"App\\": "App/",
+			"MF\\": "vendor/MF/"
+		}
+	}
+}
